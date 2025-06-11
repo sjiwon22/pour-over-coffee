@@ -10,6 +10,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.unit.dp
 
 @Composable
@@ -19,10 +20,18 @@ fun MainMenuScreen(onMakeCoffee: () -> Unit, onEditRecipe: () -> Unit) {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Button(modifier = Modifier.fillMaxWidth(), onClick = onMakeCoffee) {
+        Button(
+            modifier = Modifier.fillMaxWidth(0.8f),
+            onClick = onMakeCoffee,
+            shape = RoundedCornerShape(8.dp)
+        ) {
             Text("Make coffee")
         }
-        Button(modifier = Modifier.fillMaxWidth().padding(top = 8.dp), onClick = onEditRecipe) {
+        Button(
+            modifier = Modifier.fillMaxWidth(0.8f).padding(top = 8.dp),
+            onClick = onEditRecipe,
+            shape = RoundedCornerShape(8.dp)
+        ) {
             Text("Edit recipe")
         }
     }

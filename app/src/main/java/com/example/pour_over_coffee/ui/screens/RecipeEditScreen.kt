@@ -19,6 +19,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.unit.dp
 import com.example.pour_over_coffee.data.Recipe
 import com.example.pour_over_coffee.data.RecipeRepository
@@ -77,16 +78,24 @@ fun RecipeEditScreen(
                     }
                 }
             }
-        }
-        Button(onClick = {
-            steps.add(Step(30,30))
-        }) { Text("Add step") }
-        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-            TextButton(onClick = onDone) { Text("Back") }
-            if (recipe != null) {
-                TextButton(onClick = { onDelete(recipe) }) { Text("Delete") }
+            item {
+                Button(
+                    onClick = { steps.add(Step(30, 30)) },
+                    modifier = Modifier
+                        .fillMaxWidth(0.6f)
+                        .padding(vertical = 4.dp),
+                    shape = RoundedCornerShape(8.dp)
+                ) { Text("Add step") }
             }
-            TextButton(enabled = name.isNotBlank(), onClick = {
+        }
+        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+            TextButton(onClick = onDone, shape = RoundedCornerShape(8.dp)) { Text("Back") }
+            if (recipe != null) {
+                TextButton(onClick = { onDelete(recipe) }, shape = RoundedCornerShape(8.dp)) { Text("Delete") }
+            }
+            TextButton(
+                enabled = name.isNotBlank(),
+                onClick = {
                 val updated = recipe ?: Recipe(name = name, waterTemp = temp, beanAmount = beans)
                 updated.name = name
                 updated.waterTemp = temp
@@ -94,7 +103,9 @@ fun RecipeEditScreen(
                 updated.steps.clear(); updated.steps.addAll(steps)
                 if (recipe == null) RecipeRepository.addRecipe(updated) else RecipeRepository.updateRecipe(updated)
                 onDone()
-            }) { Text("Save") }
+            },
+                shape = RoundedCornerShape(8.dp)
+            ) { Text("Save") }
         }
     }
 }

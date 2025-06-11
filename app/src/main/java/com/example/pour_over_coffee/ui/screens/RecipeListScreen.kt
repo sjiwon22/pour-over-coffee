@@ -18,6 +18,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.unit.dp
 import com.example.pour_over_coffee.data.Recipe
 import com.example.pour_over_coffee.data.RecipeRepository
@@ -38,21 +39,30 @@ fun RecipeListScreen(
         recipes.forEach { recipe ->
             Button(
                 modifier = Modifier
-                    .fillMaxWidth()
+                    .fillMaxWidth(0.9f)
                     .padding(vertical = 4.dp)
                     .combinedClickable(
                         onClick = { onEdit(recipe) },
                         onLongClick = { toDelete.value = recipe }
                     ),
-                onClick = { onEdit(recipe) }
+                onClick = { onEdit(recipe) },
+                shape = RoundedCornerShape(8.dp)
             ) {
                 Text(recipe.name)
             }
         }
-        Button(modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp), onClick = onAdd) {
+        Button(
+            modifier = Modifier.fillMaxWidth(0.9f).padding(vertical = 4.dp),
+            onClick = onAdd,
+            shape = RoundedCornerShape(8.dp)
+        ) {
             Text("Add")
         }
-        TextButton(onClick = onBack, modifier = Modifier.fillMaxWidth()) {
+        TextButton(
+            onClick = onBack,
+            modifier = Modifier.fillMaxWidth(0.9f),
+            shape = RoundedCornerShape(8.dp)
+        ) {
             Text("Back")
         }
     }
