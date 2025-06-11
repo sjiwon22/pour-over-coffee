@@ -63,7 +63,7 @@ fun MakeCoffeeScreen(onDone: () -> Unit) {
     if (selected.value == null) {
         Column(
             modifier = Modifier.fillMaxSize().padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterVertically),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             LazyVerticalGrid(
@@ -96,16 +96,16 @@ fun MakeCoffeeScreen(onDone: () -> Unit) {
             verticalArrangement = Arrangement.spacedBy(8.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text("Brewing: ${'$'}{recipe.name}")
-            Text("Use ${'$'}{recipe.beanAmount}g beans, water at ${'$'}{recipe.waterTemp}°C")
+            Text("Brewing: ${recipe.name}")
+            Text("Use ${recipe.beanAmount}g beans, water at ${recipe.waterTemp}°C")
             recipe.steps.forEachIndexed { index, step ->
                 val done = completed.getOrNull(index) == true
                 val running = activeStep.value == index
                 val enabled = !done && activeStep.value == null && completed.take(index).all { it }
                 val label = when {
-                    done -> "Step #${'$'}{index + 1}\nWater ${'$'}{step.waterAmount}ml\nDone"
-                    running -> "Step #${'$'}{index + 1}\nWater ${'$'}{step.waterAmount}ml\n${'$'}{timeLeft.value}s"
-                    else -> "Step #${'$'}{index + 1}\nWater ${'$'}{step.waterAmount}ml\nwait for ${'$'}{step.timeSec}s"
+                    done -> "Step #${index + 1}\nWater ${step.waterAmount}ml\nDone"
+                    running -> "Step #${index + 1}\nWater ${step.waterAmount}ml\n${timeLeft.value}s"
+                    else -> "Step #${index + 1}\nWater ${step.waterAmount}ml\nwait for ${step.timeSec}s"
                 }
                 val colors = if (done) {
                     ButtonDefaults.buttonColors(containerColor = Color(0xFF9CCC65))
@@ -117,10 +117,18 @@ fun MakeCoffeeScreen(onDone: () -> Unit) {
                     enabled = enabled,
                     colors = colors,
                     modifier = Modifier
-                        .fillMaxWidth(0.8f)
+                        .fillMaxWidth(0.25f)
                         .aspectRatio(2f),
                     shape = RoundedCornerShape(8.dp)
                 ) { Text(label) }
+            }
+            if (completed.size > 0 && completed.all { it }) {
+                Button(
+                    onClick = {},
+                    modifier = Modifier.fillMaxWidth(0.6f),
+                    shape = RoundedCornerShape(8.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF9CCC65))
+                ) { Text("Have a good coffee") }
             }
             TextButton(
                 onClick = { selected.value = null },
