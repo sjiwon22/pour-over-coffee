@@ -8,13 +8,16 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.pour_over_coffee.data.Recipe
 import com.example.pour_over_coffee.data.RecipeRepository
@@ -24,24 +27,36 @@ import kotlinx.coroutines.delay
 fun MakeCoffeeScreen(onDone: () -> Unit) {
     val recipes = RecipeRepository.getRecipes()
     val selected = remember { mutableStateOf<Recipe?>(null) }
-    val currentStep = remember { mutableStateOf(0) }
+    val activeStep = remember { mutableStateOf<Int?>(null) }
     val timeLeft = remember { mutableStateOf(0) }
+    val completed = remember { mutableStateListOf<Boolean>() }
 
-    LaunchedEffect(currentStep.value) {
+    LaunchedEffect(selected.value) {
+        selected.value?.let { recipe ->
+            completed.clear()
+            repeat(recipe.steps.size) { completed.add(false) }
+            activeStep.value = null
+            timeLeft.value = 0
+        }
+    }
+
+    LaunchedEffect(activeStep.value) {
         val recipe = selected.value
-        if (recipe != null && currentStep.value in recipe.steps.indices) {
-            timeLeft.value = recipe.steps[currentStep.value].timeSec
+        val idx = activeStep.value
+        if (recipe != null && idx != null) {
+            timeLeft.value = recipe.steps[idx].timeSec
             while (timeLeft.value > 0) {
                 delay(1000)
                 timeLeft.value--
             }
-            currentStep.value++
+            completed[idx] = true
+            activeStep.value = null
         }
     }
 
     Column(modifier = Modifier.fillMaxSize().padding(16.dp).verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(8.dp)) {
         recipes.forEach { recipe ->
-            Button(modifier = Modifier.fillMaxWidth(), onClick = { selected.value = recipe; currentStep.value = 0 }) {
+            Button(modifier = Modifier.fillMaxWidth(), onClick = { selected.value = recipe }) {
                 Text(recipe.name)
             }
         }
@@ -49,11 +64,27 @@ fun MakeCoffeeScreen(onDone: () -> Unit) {
 
         selected.value?.let { recipe ->
             Text("Brewing: ${recipe.name}")
-            if (currentStep.value < recipe.steps.size) {
-                val step = recipe.steps[currentStep.value]
-                Text("Step ${currentStep.value + 1}: ${step.waterAmount}ml - ${timeLeft.value}s left")
-            } else {
-                Text("Done!")
+            Text("Use ${recipe.beanAmount}g beans, water at ${recipe.waterTemp}°C")
+            recipe.steps.forEachIndexed { index, step ->
+                val done = completed.getOrNull(index) == true
+                val running = activeStep.value == index
+                val enabled = !done && activeStep.value == null && completed.take(index).all { it }
+                val label = when {
+                    done -> "Done"
+                    running -> "${timeLeft.value}s"
+                    else -> "Step ${index + 1}: ${step.waterAmount}ml / ${step.timeSec}s"
+                }
+                val colors = if (done) {
+                    ButtonDefaults.buttonColors(containerColor = Color(0xFF9CCC65))
+                } else {
+                    ButtonDefaults.buttonColors()
+                }
+                Button(
+                    onClick = { activeStep.value = index },
+                    enabled = enabled,
+                    colors = colors,
+                    modifier = Modifier.fillMaxWidth()
+                ) { Text(label) }
             }
         }
     }

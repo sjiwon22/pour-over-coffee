@@ -26,7 +26,8 @@ import com.example.pour_over_coffee.data.RecipeRepository
 @Composable
 fun RecipeListScreen(
     onAdd: () -> Unit,
-    onEdit: (Recipe) -> Unit
+    onEdit: (Recipe) -> Unit,
+    onBack: () -> Unit
 ) {
     val recipes = RecipeRepository.getRecipes()
     val toDelete: MutableState<Recipe?> = remember { mutableStateOf(null) }
@@ -50,6 +51,9 @@ fun RecipeListScreen(
         }
         Button(modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp), onClick = onAdd) {
             Text("Add")
+        }
+        TextButton(onClick = onBack, modifier = Modifier.fillMaxWidth()) {
+            Text("Back")
         }
     }
 

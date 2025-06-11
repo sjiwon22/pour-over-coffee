@@ -10,6 +10,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.pour_over_coffee.data.Recipe
+import com.example.pour_over_coffee.data.RecipeRepository
 import com.example.pour_over_coffee.ui.screens.MainMenuScreen
 import com.example.pour_over_coffee.ui.screens.MakeCoffeeScreen
 import com.example.pour_over_coffee.ui.screens.RecipeEditScreen
@@ -46,11 +47,16 @@ fun App() {
                     onEdit = { recipe ->
                         editingRecipe.value = recipe
                         screen.value = Screen.EDIT
-                    }
+                    },
+                    onBack = { screen.value = Screen.MAIN }
                 )
                 Screen.EDIT -> RecipeEditScreen(
                     recipe = editingRecipe.value,
-                    onDone = { screen.value = Screen.LIST }
+                    onDone = { screen.value = Screen.LIST },
+                    onDelete = { recipe ->
+                        RecipeRepository.removeRecipe(recipe)
+                        screen.value = Screen.LIST
+                    }
                 )
                 Screen.BREW -> MakeCoffeeScreen(
                     onDone = { screen.value = Screen.MAIN }

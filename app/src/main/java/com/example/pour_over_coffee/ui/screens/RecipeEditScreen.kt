@@ -27,7 +27,8 @@ import com.example.pour_over_coffee.data.Step
 @Composable
 fun RecipeEditScreen(
     recipe: Recipe?,
-    onDone: () -> Unit
+    onDone: () -> Unit,
+    onDelete: (Recipe) -> Unit
 ) {
     var name by remember { mutableStateOf(recipe?.name ?: "") }
     var temp by remember { mutableStateOf(recipe?.waterTemp ?: 90) }
@@ -81,8 +82,11 @@ fun RecipeEditScreen(
             steps.add(Step(30,30))
         }) { Text("Add step") }
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-            TextButton(onClick = onDone) { Text("Cancel") }
-            TextButton(onClick = {
+            TextButton(onClick = onDone) { Text("Back") }
+            if (recipe != null) {
+                TextButton(onClick = { onDelete(recipe) }) { Text("Delete") }
+            }
+            TextButton(enabled = name.isNotBlank(), onClick = {
                 val updated = recipe ?: Recipe(name = name, waterTemp = temp, beanAmount = beans)
                 updated.name = name
                 updated.waterTemp = temp
