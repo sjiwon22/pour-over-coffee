@@ -1,5 +1,6 @@
 package com.example.pour_over_coffee.ui.screens
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -21,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import com.example.pour_over_coffee.data.Recipe
 import com.example.pour_over_coffee.data.RecipeRepository
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun RecipeListScreen(
     onAdd: () -> Unit,
