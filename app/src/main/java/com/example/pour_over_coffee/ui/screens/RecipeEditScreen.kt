@@ -40,7 +40,13 @@ fun RecipeEditScreen(
         }
     }
 
-    Column(modifier = Modifier.fillMaxSize().padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(start = 16.dp, top = 16.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.Top),
+        horizontalAlignment = Alignment.Start
+    ) {
         OutlinedTextField(value = name, onValueChange = { name = it }, label = { Text("Recipe name") }, modifier = Modifier.fillMaxWidth())
         OutlinedTextField(value = temp.toString(), onValueChange = { temp = it.toIntOrNull() ?: temp }, label = { Text("Water temp") }, modifier = Modifier.fillMaxWidth())
         OutlinedTextField(value = beans.toString(), onValueChange = { beans = it.toIntOrNull() ?: beans }, label = { Text("Bean amount") }, modifier = Modifier.fillMaxWidth())
@@ -82,16 +88,25 @@ fun RecipeEditScreen(
                 Button(
                     onClick = { steps.add(Step(30, 30)) },
                     modifier = Modifier
-                        .fillMaxWidth(0.6f)
+                        .fillMaxWidth(0.25f)
+                        .aspectRatio(2f)
                         .padding(vertical = 4.dp),
-                    shape = RoundedCornerShape(8.dp)
+                    shape = RoundedCornerShape(4.dp)
                 ) { Text("Add step") }
             }
         }
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-            TextButton(onClick = onDone, shape = RoundedCornerShape(8.dp)) { Text("Back") }
+            TextButton(
+                onClick = onDone,
+                modifier = Modifier.fillMaxWidth(0.25f).aspectRatio(2f),
+                shape = RoundedCornerShape(4.dp)
+            ) { Text("Back") }
             if (recipe != null) {
-                TextButton(onClick = { onDelete(recipe) }, shape = RoundedCornerShape(8.dp)) { Text("Delete") }
+                TextButton(
+                    onClick = { onDelete(recipe) },
+                    modifier = Modifier.fillMaxWidth(0.25f).aspectRatio(2f),
+                    shape = RoundedCornerShape(4.dp)
+                ) { Text("Delete") }
             }
             TextButton(
                 enabled = name.isNotBlank(),
@@ -104,7 +119,8 @@ fun RecipeEditScreen(
                 if (recipe == null) RecipeRepository.addRecipe(updated) else RecipeRepository.updateRecipe(updated)
                 onDone()
             },
-                shape = RoundedCornerShape(8.dp)
+                modifier = Modifier.fillMaxWidth(0.25f).aspectRatio(2f),
+                shape = RoundedCornerShape(4.dp)
             ) { Text("Save") }
         }
     }

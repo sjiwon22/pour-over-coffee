@@ -33,35 +33,45 @@ fun RecipeListScreen(
     val recipes = RecipeRepository.getRecipes()
     val toDelete: MutableState<Recipe?> = remember { mutableStateOf(null) }
     Column(
-        modifier = Modifier.fillMaxSize().padding(16.dp).verticalScroll(rememberScrollState()),
-        verticalArrangement = Arrangement.Center
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(start = 16.dp, top = 16.dp)
+            .verticalScroll(rememberScrollState()),
+        verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.Top),
+        horizontalAlignment = Alignment.Start
     ) {
         recipes.forEach { recipe ->
             Button(
                 modifier = Modifier
-                    .fillMaxWidth(0.9f)
+                    .fillMaxWidth(0.25f)
+                    .aspectRatio(2f)
                     .padding(vertical = 4.dp)
                     .combinedClickable(
                         onClick = { onEdit(recipe) },
                         onLongClick = { toDelete.value = recipe }
                     ),
                 onClick = { onEdit(recipe) },
-                shape = RoundedCornerShape(8.dp)
+                shape = RoundedCornerShape(4.dp)
             ) {
                 Text(recipe.name)
             }
         }
         Button(
-            modifier = Modifier.fillMaxWidth(0.9f).padding(vertical = 4.dp),
+            modifier = Modifier
+                .fillMaxWidth(0.25f)
+                .aspectRatio(2f)
+                .padding(vertical = 4.dp),
             onClick = onAdd,
-            shape = RoundedCornerShape(8.dp)
+            shape = RoundedCornerShape(4.dp)
         ) {
             Text("Add")
         }
         TextButton(
             onClick = onBack,
-            modifier = Modifier.fillMaxWidth(0.9f),
-            shape = RoundedCornerShape(8.dp)
+            modifier = Modifier
+                .fillMaxWidth(0.25f)
+                .aspectRatio(2f),
+            shape = RoundedCornerShape(4.dp)
         ) {
             Text("Back")
         }

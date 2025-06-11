@@ -16,21 +16,27 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun MainMenuScreen(onMakeCoffee: () -> Unit, onEditRecipe: () -> Unit) {
     Column(
-        modifier = Modifier.fillMaxSize().padding(16.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(start = 16.dp, top = 16.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.Top),
+        horizontalAlignment = Alignment.Start
     ) {
         Button(
-            modifier = Modifier.fillMaxWidth(0.8f),
+            modifier = Modifier
+                .fillMaxWidth(0.25f)
+                .aspectRatio(2f),
             onClick = onMakeCoffee,
-            shape = RoundedCornerShape(8.dp)
+            shape = RoundedCornerShape(4.dp)
         ) {
             Text("Make coffee")
         }
         Button(
-            modifier = Modifier.fillMaxWidth(0.8f).padding(top = 8.dp),
+            modifier = Modifier
+                .fillMaxWidth(0.25f)
+                .aspectRatio(2f),
             onClick = onEditRecipe,
-            shape = RoundedCornerShape(8.dp)
+            shape = RoundedCornerShape(4.dp)
         ) {
             Text("Edit recipe")
         }

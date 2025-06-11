@@ -62,28 +62,32 @@ fun MakeCoffeeScreen(onDone: () -> Unit) {
 
     if (selected.value == null) {
         Column(
-            modifier = Modifier.fillMaxSize().padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterVertically),
-            horizontalAlignment = Alignment.CenterHorizontally
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(start = 16.dp, top = 16.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.Top),
+            horizontalAlignment = Alignment.Start
         ) {
             LazyVerticalGrid(
-                columns = GridCells.Adaptive(120.dp),
-                modifier = Modifier.weight(1f, fill = false)
+                columns = GridCells.Fixed(4),
+                modifier = Modifier.weight(1f, fill = false),
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 items(recipes) { recipe ->
                     Button(
                         onClick = { selected.value = recipe },
-                        modifier = Modifier
-                            .padding(4.dp)
-                            .aspectRatio(1f),
-                        shape = RoundedCornerShape(8.dp)
+                        modifier = Modifier.aspectRatio(2f),
+                        shape = RoundedCornerShape(4.dp)
                     ) { Text(recipe.name) }
                 }
             }
             TextButton(
                 onClick = onDone,
-                modifier = Modifier.fillMaxWidth(0.9f),
-                shape = RoundedCornerShape(8.dp)
+                modifier = Modifier
+                    .fillMaxWidth(0.25f)
+                    .aspectRatio(2f),
+                shape = RoundedCornerShape(4.dp)
             ) { Text("Back") }
         }
     } else {
@@ -91,10 +95,10 @@ fun MakeCoffeeScreen(onDone: () -> Unit) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(16.dp)
+                .padding(start = 16.dp, top = 16.dp)
                 .verticalScroll(rememberScrollState()),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+            verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.Top),
+            horizontalAlignment = Alignment.Start
         ) {
             Text("Brewing: ${recipe.name}")
             Text("Use ${recipe.beanAmount}g beans, water at ${recipe.waterTemp}°C")
@@ -119,21 +123,25 @@ fun MakeCoffeeScreen(onDone: () -> Unit) {
                     modifier = Modifier
                         .fillMaxWidth(0.25f)
                         .aspectRatio(2f),
-                    shape = RoundedCornerShape(8.dp)
+                    shape = RoundedCornerShape(4.dp)
                 ) { Text(label) }
             }
             if (completed.size > 0 && completed.all { it }) {
                 Button(
                     onClick = {},
-                    modifier = Modifier.fillMaxWidth(0.6f),
-                    shape = RoundedCornerShape(8.dp),
+                    modifier = Modifier
+                        .fillMaxWidth(0.25f)
+                        .aspectRatio(2f),
+                    shape = RoundedCornerShape(4.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF9CCC65))
                 ) { Text("Have a good coffee") }
             }
             TextButton(
                 onClick = { selected.value = null },
-                modifier = Modifier.fillMaxWidth(0.9f),
-                shape = RoundedCornerShape(8.dp)
+                modifier = Modifier
+                    .fillMaxWidth(0.25f)
+                    .aspectRatio(2f),
+                shape = RoundedCornerShape(4.dp)
             ) { Text("Back") }
         }
     }
