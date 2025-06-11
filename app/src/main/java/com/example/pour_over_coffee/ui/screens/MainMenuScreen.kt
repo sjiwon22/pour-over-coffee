@@ -19,7 +19,7 @@ fun MainMenuScreen(onMakeCoffee: () -> Unit, onEditRecipe: () -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(start = 16.dp, top = 16.dp),
+            .padding(start = 16.dp, top = 48.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.Top),
         horizontalAlignment = Alignment.Start
     ) {

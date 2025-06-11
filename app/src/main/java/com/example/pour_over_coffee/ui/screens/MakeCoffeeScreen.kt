@@ -11,6 +11,7 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
@@ -27,6 +28,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.unit.dp
 import com.example.pour_over_coffee.data.Recipe
 import com.example.pour_over_coffee.data.RecipeRepository
+import androidx.compose.ui.input.pointer.pointerInput
 import kotlinx.coroutines.delay
 
 @Composable
@@ -64,7 +66,12 @@ fun MakeCoffeeScreen(onDone: () -> Unit) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(start = 16.dp, top = 16.dp),
+                .padding(start = 16.dp, top = 48.dp)
+                .pointerInput(Unit) {
+                    detectHorizontalDragGestures { change, dragAmount ->
+                        if (dragAmount < -100) onDone()
+                    }
+                },
             verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.Top),
             horizontalAlignment = Alignment.Start
         ) {
@@ -82,21 +89,19 @@ fun MakeCoffeeScreen(onDone: () -> Unit) {
                     ) { Text(recipe.name) }
                 }
             }
-            TextButton(
-                onClick = onDone,
-                modifier = Modifier
-                    .fillMaxWidth(0.25f)
-                    .aspectRatio(2f),
-                shape = RoundedCornerShape(4.dp)
-            ) { Text("Back") }
         }
     } else {
         val recipe = selected.value!!
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(start = 16.dp, top = 16.dp)
-                .verticalScroll(rememberScrollState()),
+                .padding(start = 16.dp, top = 48.dp)
+                .verticalScroll(rememberScrollState())
+                .pointerInput(Unit) {
+                    detectHorizontalDragGestures { change, dragAmount ->
+                        if (dragAmount < -100) selected.value = null
+                    }
+                },
             verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.Top),
             horizontalAlignment = Alignment.Start
         ) {
@@ -136,13 +141,6 @@ fun MakeCoffeeScreen(onDone: () -> Unit) {
                     colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF9CCC65))
                 ) { Text("Have a good coffee") }
             }
-            TextButton(
-                onClick = { selected.value = null },
-                modifier = Modifier
-                    .fillMaxWidth(0.25f)
-                    .aspectRatio(2f),
-                shape = RoundedCornerShape(4.dp)
-            ) { Text("Back") }
         }
     }
 }

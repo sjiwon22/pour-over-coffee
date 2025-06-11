@@ -2,7 +2,6 @@ package com.example.pour_over_coffee.ui.screens
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -26,6 +25,9 @@ import androidx.compose.ui.unit.dp
 import com.example.pour_over_coffee.data.Recipe
 import com.example.pour_over_coffee.data.RecipeRepository
 import com.example.pour_over_coffee.data.Step
+import androidx.compose.foundation.gestures.detectHorizontalDragGestures
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.foundation.layout.Row
 
 @Composable
 fun RecipeEditScreen(
@@ -45,7 +47,12 @@ fun RecipeEditScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(start = 16.dp, top = 16.dp),
+            .padding(start = 16.dp, top = 48.dp)
+            .pointerInput(Unit) {
+                detectHorizontalDragGestures { change, dragAmount ->
+                    if (dragAmount < -100) onDone()
+                }
+            },
         verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.Top),
         horizontalAlignment = Alignment.Start
     ) {
@@ -97,12 +104,10 @@ fun RecipeEditScreen(
                 ) { Text("Add step") }
             }
         }
-        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-            TextButton(
-                onClick = onDone,
-                modifier = Modifier.fillMaxWidth(0.25f).aspectRatio(2f),
-                shape = RoundedCornerShape(4.dp)
-            ) { Text("Back") }
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
             if (recipe != null) {
                 TextButton(
                     onClick = { onDelete(recipe) },

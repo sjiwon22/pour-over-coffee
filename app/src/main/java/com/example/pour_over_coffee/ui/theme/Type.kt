@@ -3,13 +3,17 @@ package com.example.pour_over_coffee.ui.theme
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.Font
+import com.example.pour_over_coffee.R
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 
 // Set of Material typography styles to start with
+val consolas = FontFamily(Font(R.font.consolas))
+
 val Typography = Typography(
     bodyLarge = TextStyle(
-        fontFamily = FontFamily.Cursive,
+        fontFamily = consolas,
         fontWeight = FontWeight.Normal,
         fontSize = 16.sp,
         lineHeight = 24.sp,

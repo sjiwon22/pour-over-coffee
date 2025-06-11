@@ -2,6 +2,7 @@ package com.example.pour_over_coffee.ui.screens
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -22,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.Alignment
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.input.pointer.pointerInput
 import com.example.pour_over_coffee.data.Recipe
 import com.example.pour_over_coffee.data.RecipeRepository
 
@@ -37,8 +39,13 @@ fun RecipeListScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(start = 16.dp, top = 16.dp)
-            .verticalScroll(rememberScrollState()),
+            .padding(start = 16.dp, top = 48.dp)
+            .verticalScroll(rememberScrollState())
+            .pointerInput(Unit) {
+                detectHorizontalDragGestures { change, dragAmount ->
+                    if (dragAmount < -100) onBack()
+                }
+            },
         verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.Top),
         horizontalAlignment = Alignment.Start
     ) {
@@ -67,15 +74,6 @@ fun RecipeListScreen(
             shape = RoundedCornerShape(4.dp)
         ) {
             Text("Add")
-        }
-        TextButton(
-            onClick = onBack,
-            modifier = Modifier
-                .fillMaxWidth(0.25f)
-                .aspectRatio(2f),
-            shape = RoundedCornerShape(4.dp)
-        ) {
-            Text("Back")
         }
     }
 
