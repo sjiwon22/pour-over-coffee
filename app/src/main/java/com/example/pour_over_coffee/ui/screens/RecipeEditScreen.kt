@@ -1,7 +1,5 @@
 package com.example.pour_over_coffee.ui.screens
 
-import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,6 +13,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.getValue
@@ -25,7 +24,6 @@ import com.example.pour_over_coffee.data.Recipe
 import com.example.pour_over_coffee.data.RecipeRepository
 import com.example.pour_over_coffee.data.Step
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun RecipeEditScreen(
     recipe: Recipe?,
@@ -34,7 +32,11 @@ fun RecipeEditScreen(
     var name by remember { mutableStateOf(recipe?.name ?: "") }
     var temp by remember { mutableStateOf(recipe?.waterTemp ?: 90) }
     var beans by remember { mutableStateOf(recipe?.beanAmount ?: 15) }
-    val steps = remember { mutableStateOf(recipe?.steps?.toMutableList() ?: mutableListOf()) }
+    val steps = remember {
+        mutableStateListOf<Step>().apply {
+            recipe?.steps?.forEach { add(it.copy()) }
+        }
+    }
 
     Column(modifier = Modifier.fillMaxSize().padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
         OutlinedTextField(value = name, onValueChange = { name = it }, label = { Text("Recipe name") }, modifier = Modifier.fillMaxWidth())
@@ -43,20 +45,40 @@ fun RecipeEditScreen(
 
         Text("Steps")
         LazyColumn(modifier = Modifier.weight(1f, true)) {
-            itemsIndexed(steps.value) { index, step ->
+            itemsIndexed(steps) { index, step ->
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(vertical = 4.dp)
-                        .combinedClickable(onClick = {}, onLongClick = { steps.value.removeAt(index) }),
-                    horizontalArrangement = Arrangement.SpaceBetween
+                        .padding(vertical = 4.dp),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    Text("${step.waterAmount}ml - ${step.timeSec}s")
+                    Text("Step ${index + 1}")
+                    OutlinedTextField(
+                        value = step.waterAmount.toString(),
+                        onValueChange = { input ->
+                            val amt = input.toIntOrNull() ?: step.waterAmount
+                            steps[index] = step.copy(waterAmount = amt)
+                        },
+                        label = { Text("Water (ml)") },
+                        modifier = Modifier.weight(1f)
+                    )
+                    OutlinedTextField(
+                        value = step.timeSec.toString(),
+                        onValueChange = { input ->
+                            val t = input.toIntOrNull() ?: step.timeSec
+                            steps[index] = step.copy(timeSec = t)
+                        },
+                        label = { Text("Time (s)") },
+                        modifier = Modifier.weight(1f)
+                    )
+                    TextButton(onClick = { steps.removeAt(index) }) {
+                        Text("Delete")
+                    }
                 }
             }
         }
         Button(onClick = {
-            steps.value.add(Step(30,30))
+            steps.add(Step(30,30))
         }) { Text("Add step") }
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
             TextButton(onClick = onDone) { Text("Cancel") }
@@ -65,7 +87,7 @@ fun RecipeEditScreen(
                 updated.name = name
                 updated.waterTemp = temp
                 updated.beanAmount = beans
-                updated.steps.clear(); updated.steps.addAll(steps.value)
+                updated.steps.clear(); updated.steps.addAll(steps)
                 if (recipe == null) RecipeRepository.addRecipe(updated) else RecipeRepository.updateRecipe(updated)
                 onDone()
             }) { Text("Save") }
