@@ -19,7 +19,8 @@ import androidx.compose.ui.unit.dp
 fun MainMenuScreen(
     onMakeCoffee: () -> Unit,
     onEditRecipe: () -> Unit,
-    onHistory: () -> Unit
+    onHistory: () -> Unit,
+    onRanking: () -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -55,6 +56,15 @@ fun MainMenuScreen(
             shape = RoundedCornerShape(4.dp)
         ) {
             Text("History")
+        }
+        Button(
+            modifier = Modifier
+                .fillMaxWidth(0.25f)
+                .aspectRatio(2f),
+            onClick = onRanking,
+            shape = RoundedCornerShape(4.dp)
+        ) {
+            Text("Ranking")
         }
     }
 }

@@ -39,6 +39,19 @@ object HistoryRepository {
         save()
     }
 
+    fun getStats(): List<RankingStat> {
+        if (!loaded) load()
+        val grouped = history.groupBy { it.name }
+        return grouped.map { (name, entries) ->
+            val water = entries.first().waterAmount
+            val withScores = entries.filter { it.score != null }
+            val avg = if (withScores.isNotEmpty()) {
+                withScores.map { it.score!!.toDouble() }.average()
+            } else 0.0
+            RankingStat(name, water, avg, entries.size)
+        }
+    }
+
     fun getHistory(): List<HistoryEntry> {
         if (!loaded) load()
         return history
@@ -96,4 +109,11 @@ data class HistoryEntry(
     val waterAmount: Int,
     val timestamp: Long,
     var score: Int? = null
+)
+
+data class RankingStat(
+    val name: String,
+    val waterAmount: Int,
+    val averageScore: Double,
+    val count: Int
 )

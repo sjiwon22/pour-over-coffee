@@ -17,6 +17,7 @@ import com.example.pour_over_coffee.ui.screens.MakeCoffeeScreen
 import com.example.pour_over_coffee.ui.screens.RecipeEditScreen
 import com.example.pour_over_coffee.ui.screens.RecipeListScreen
 import com.example.pour_over_coffee.ui.screens.HistoryScreen
+import com.example.pour_over_coffee.ui.screens.RankingScreen
 import com.example.pour_over_coffee.ui.theme.PourovercoffeeTheme
 
 class MainActivity : ComponentActivity() {
@@ -29,7 +30,7 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-enum class Screen { MAIN, LIST, EDIT, BREW, HISTORY }
+enum class Screen { MAIN, LIST, EDIT, BREW, HISTORY, RANKING }
 
 @Composable
 fun App() {
@@ -42,7 +43,8 @@ fun App() {
                 Screen.MAIN -> MainMenuScreen(
                     onMakeCoffee = { screen.value = Screen.BREW },
                     onEditRecipe = { screen.value = Screen.LIST },
-                    onHistory = { screen.value = Screen.HISTORY }
+                    onHistory = { screen.value = Screen.HISTORY },
+                    onRanking = { screen.value = Screen.RANKING }
                 )
                 Screen.LIST -> RecipeListScreen(
                     onAdd = {
@@ -67,6 +69,9 @@ fun App() {
                     onDone = { screen.value = Screen.MAIN }
                 )
                 Screen.HISTORY -> HistoryScreen(
+                    onBack = { screen.value = Screen.MAIN }
+                )
+                Screen.RANKING -> RankingScreen(
                     onBack = { screen.value = Screen.MAIN }
                 )
             }
