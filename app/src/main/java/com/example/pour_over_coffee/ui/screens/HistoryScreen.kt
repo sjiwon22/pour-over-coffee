@@ -53,8 +53,8 @@ fun HistoryScreen(onBack: () -> Unit) {
                 shape = RoundedCornerShape(4.dp)
             ) {
                 val time = format.format(Date(entry.timestamp))
-                val base = "${entry.name} ${entry.waterAmount}ml $time"
-                val label = if (entry.score != null) "$base (score ${entry.score})" else base
+                val scoreLine = if (entry.score != null) "Score ${entry.score}" else "Score"
+                val label = "${entry.name} (${entry.waterAmount}ml)\n$time\n$scoreLine"
                 Text(label)
             }
         }
