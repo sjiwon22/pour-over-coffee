@@ -1,7 +1,8 @@
 package com.example.pour_over_coffee
 
+import com.example.pour_over_coffee.data.Recipe
+import com.example.pour_over_coffee.data.RecipeRepository
 import org.junit.Test
-
 import org.junit.Assert.*
 
 /**
@@ -11,7 +12,10 @@ import org.junit.Assert.*
  */
 class ExampleUnitTest {
     @Test
-    fun addition_isCorrect() {
-        assertEquals(4, 2 + 2)
+    fun repository_addsRecipe() {
+        val sizeBefore = RecipeRepository.getRecipes().size
+        RecipeRepository.addRecipe(Recipe(name = "Test", waterTemp = 90, beanAmount = 15))
+        val sizeAfter = RecipeRepository.getRecipes().size
+        assertEquals(sizeBefore + 1, sizeAfter)
     }
 }
