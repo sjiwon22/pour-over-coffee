@@ -28,7 +28,7 @@ enum class RankColumn { NAME, WATER, SCORE, COUNT }
 
 @Composable
 fun RankingScreen(onBack: () -> Unit) {
-    HistoryRepository.getHistory() // observe changes
+    // Recompose whenever history changes
     val stats = HistoryRepository.getStats()
     val sortColumn = remember { mutableStateOf(RankColumn.SCORE) }
     val ascending = remember { mutableStateOf(false) }

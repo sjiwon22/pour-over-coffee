@@ -66,14 +66,19 @@ object HistoryRepository {
     }
 
     fun clearScoresForRecipe(name: String) {
+        if (!loaded) load()
         var changed = false
-        history.forEachIndexed { idx, entry ->
+        val updated = history.map { entry ->
             if (entry.name == name && entry.score != null) {
-                history[idx] = entry.copy(score = null)
                 changed = true
-            }
+                entry.copy(score = null)
+            } else entry
         }
-        if (changed) save()
+        if (changed) {
+            history.clear()
+            history.addAll(updated)
+            save()
+        }
     }
 
     private fun load() {
