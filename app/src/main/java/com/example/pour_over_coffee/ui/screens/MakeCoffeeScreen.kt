@@ -7,9 +7,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
@@ -71,21 +70,26 @@ fun MakeCoffeeScreen(onDone: () -> Unit) {
             verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.Top),
             horizontalAlignment = Alignment.Start
         ) {
-            LazyVerticalGrid(
-                columns = GridCells.Fixed(4),
+            LazyColumn(
                 modifier = Modifier.weight(1f, fill = false),
-                verticalArrangement = Arrangement.spacedBy(8.dp),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 items(recipes) { recipe ->
+                    val totalWater = recipe.steps.sumOf { it.waterAmount }
+                    val score = HistoryRepository.getStats()
+                        .firstOrNull { it.name == recipe.name }?.averageScore
+                    val scoreStr = String.format("%.1f", score ?: 0.0)
+                    val label = "${recipe.name}\n${recipe.beanAmount}g / ${totalWater}ml\nScore $scoreStr"
                     Button(
                         onClick = {
                             selected.value = recipe
                             HistoryRepository.addEntry(recipe)
                         },
-                        modifier = Modifier.aspectRatio(2f),
+                        modifier = Modifier
+                            .fillMaxWidth(0.5f)
+                            .aspectRatio(2f),
                         shape = RoundedCornerShape(4.dp)
-                    ) { Text(recipe.name) }
+                    ) { Text(label) }
                 }
             }
             TextButton(
