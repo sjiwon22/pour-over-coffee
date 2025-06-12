@@ -6,9 +6,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
@@ -27,6 +27,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.unit.dp
 import com.example.pour_over_coffee.data.Recipe
 import com.example.pour_over_coffee.data.RecipeRepository
+import com.example.pour_over_coffee.data.HistoryRepository
 import kotlinx.coroutines.delay
 
 @Composable
@@ -64,28 +65,37 @@ fun MakeCoffeeScreen(onDone: () -> Unit) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(start = 16.dp, top = 16.dp),
+                .statusBarsPadding()
+                .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.Top),
             horizontalAlignment = Alignment.Start
         ) {
-            LazyVerticalGrid(
-                columns = GridCells.Fixed(4),
+            LazyColumn(
                 modifier = Modifier.weight(1f, fill = false),
-                verticalArrangement = Arrangement.spacedBy(8.dp),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 items(recipes) { recipe ->
+                    val totalWater = recipe.steps.sumOf { it.waterAmount }
+                    val score = HistoryRepository.getStats()
+                        .firstOrNull { it.name == recipe.name }?.averageScore
+                    val scoreStr = String.format("%.1f", score ?: 0.0)
+                    val label = "${recipe.name}\n${recipe.beanAmount}g / ${totalWater}ml\nScore $scoreStr"
                     Button(
-                        onClick = { selected.value = recipe },
-                        modifier = Modifier.aspectRatio(2f),
+                        onClick = {
+                            selected.value = recipe
+                            HistoryRepository.addEntry(recipe)
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth(0.5f)
+                            .aspectRatio(2f),
                         shape = RoundedCornerShape(4.dp)
-                    ) { Text(recipe.name) }
+                    ) { Text(label) }
                 }
             }
             TextButton(
                 onClick = onDone,
                 modifier = Modifier
-                    .fillMaxWidth(0.25f)
+                    .fillMaxWidth(0.5f)
                     .aspectRatio(2f),
                 shape = RoundedCornerShape(4.dp)
             ) { Text("Back") }
@@ -95,7 +105,8 @@ fun MakeCoffeeScreen(onDone: () -> Unit) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(start = 16.dp, top = 16.dp)
+                .statusBarsPadding()
+                .padding(16.dp)
                 .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.Top),
             horizontalAlignment = Alignment.Start
@@ -121,7 +132,7 @@ fun MakeCoffeeScreen(onDone: () -> Unit) {
                     enabled = enabled,
                     colors = colors,
                     modifier = Modifier
-                        .fillMaxWidth(0.25f)
+                        .fillMaxWidth(0.5f)
                         .aspectRatio(2f),
                     shape = RoundedCornerShape(4.dp)
                 ) { Text(label) }
@@ -130,7 +141,7 @@ fun MakeCoffeeScreen(onDone: () -> Unit) {
                 Button(
                     onClick = {},
                     modifier = Modifier
-                        .fillMaxWidth(0.25f)
+                        .fillMaxWidth(0.5f)
                         .aspectRatio(2f),
                     shape = RoundedCornerShape(4.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF9CCC65))
@@ -139,7 +150,7 @@ fun MakeCoffeeScreen(onDone: () -> Unit) {
             TextButton(
                 onClick = { selected.value = null },
                 modifier = Modifier
-                    .fillMaxWidth(0.25f)
+                    .fillMaxWidth(0.5f)
                     .aspectRatio(2f),
                 shape = RoundedCornerShape(4.dp)
             ) { Text("Back") }

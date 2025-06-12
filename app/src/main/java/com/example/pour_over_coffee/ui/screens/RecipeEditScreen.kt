@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.Button
@@ -45,7 +46,8 @@ fun RecipeEditScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(start = 16.dp, top = 16.dp),
+            .statusBarsPadding()
+            .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.Top),
         horizontalAlignment = Alignment.Start
     ) {
@@ -90,7 +92,7 @@ fun RecipeEditScreen(
                 Button(
                     onClick = { steps.add(Step(30, 30)) },
                     modifier = Modifier
-                        .fillMaxWidth(0.25f)
+                        .fillMaxWidth(0.5f)
                         .aspectRatio(2f)
                         .padding(vertical = 4.dp),
                     shape = RoundedCornerShape(4.dp)
@@ -100,13 +102,13 @@ fun RecipeEditScreen(
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
             TextButton(
                 onClick = onDone,
-                modifier = Modifier.fillMaxWidth(0.25f).aspectRatio(2f),
+                modifier = Modifier.fillMaxWidth(0.5f).aspectRatio(2f),
                 shape = RoundedCornerShape(4.dp)
             ) { Text("Back") }
             if (recipe != null) {
                 TextButton(
                     onClick = { onDelete(recipe) },
-                    modifier = Modifier.fillMaxWidth(0.25f).aspectRatio(2f),
+                    modifier = Modifier.fillMaxWidth(0.5f).aspectRatio(2f),
                     shape = RoundedCornerShape(4.dp)
                 ) { Text("Delete") }
             }
@@ -121,7 +123,7 @@ fun RecipeEditScreen(
                 if (recipe == null) RecipeRepository.addRecipe(updated) else RecipeRepository.updateRecipe(updated)
                 onDone()
             },
-                modifier = Modifier.fillMaxWidth(0.25f).aspectRatio(2f),
+                modifier = Modifier.fillMaxWidth(0.5f).aspectRatio(2f),
                 shape = RoundedCornerShape(4.dp)
             ) { Text("Save") }
         }

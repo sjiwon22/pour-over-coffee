@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
@@ -37,7 +38,8 @@ fun RecipeListScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(start = 16.dp, top = 16.dp)
+            .statusBarsPadding()
+            .padding(16.dp)
             .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.Top),
         horizontalAlignment = Alignment.Start
@@ -45,7 +47,7 @@ fun RecipeListScreen(
         recipes.forEach { recipe ->
             Button(
                 modifier = Modifier
-                    .fillMaxWidth(0.25f)
+                    .fillMaxWidth(0.5f)
                     .aspectRatio(2f)
                     .padding(vertical = 4.dp)
                     .combinedClickable(
@@ -60,7 +62,7 @@ fun RecipeListScreen(
         }
         Button(
             modifier = Modifier
-                .fillMaxWidth(0.25f)
+                .fillMaxWidth(0.5f)
                 .aspectRatio(2f)
                 .padding(vertical = 4.dp),
             onClick = onAdd,
@@ -71,7 +73,7 @@ fun RecipeListScreen(
         TextButton(
             onClick = onBack,
             modifier = Modifier
-                .fillMaxWidth(0.25f)
+                .fillMaxWidth(0.5f)
                 .aspectRatio(2f),
             shape = RoundedCornerShape(4.dp)
         ) {
