@@ -51,6 +51,7 @@ fun RecipeListScreen(
     ) {
         recipes.forEach { recipe ->
             Button(
+                onClick = {},
                 modifier = Modifier
                     .fillMaxWidth(0.25f)
                     .aspectRatio(2f)
@@ -59,7 +60,6 @@ fun RecipeListScreen(
                         onClick = { onEdit(recipe) },
                         onLongClick = { toDelete.value = recipe }
                     ),
-                onClick = { onEdit(recipe) },
                 shape = RoundedCornerShape(4.dp)
             ) {
                 Text(recipe.name)
