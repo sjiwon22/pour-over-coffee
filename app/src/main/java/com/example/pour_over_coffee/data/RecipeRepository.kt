@@ -67,25 +67,29 @@ object RecipeRepository {
         }
 
         recipes.clear()
-        val array = JSONArray(json)
-        for (i in 0 until array.length()) {
-            val obj = array.getJSONObject(i)
-            val stepsArray = obj.getJSONArray("steps")
-            val steps = mutableListOf<Step>()
-            for (j in 0 until stepsArray.length()) {
-                val sObj = stepsArray.getJSONObject(j)
-                steps += Step(
-                    waterAmount = sObj.getInt("waterAmount"),
-                    timeSec = sObj.getInt("timeSec")
+        try {
+            val array = JSONArray(json)
+            for (i in 0 until array.length()) {
+                val obj = array.getJSONObject(i)
+                val stepsArray = obj.getJSONArray("steps")
+                val steps = mutableListOf<Step>()
+                for (j in 0 until stepsArray.length()) {
+                    val sObj = stepsArray.getJSONObject(j)
+                    steps += Step(
+                        waterAmount = sObj.getInt("waterAmount"),
+                        timeSec = sObj.getInt("timeSec")
+                    )
+                }
+                recipes += Recipe(
+                    id = obj.getString("id"),
+                    name = obj.getString("name"),
+                    waterTemp = obj.getInt("waterTemp"),
+                    beanAmount = obj.getInt("beanAmount"),
+                    steps = steps
                 )
             }
-            recipes += Recipe(
-                id = obj.getString("id"),
-                name = obj.getString("name"),
-                waterTemp = obj.getInt("waterTemp"),
-                beanAmount = obj.getInt("beanAmount"),
-                steps = steps
-            )
+        } catch (_: Exception) {
+            // Ignore corrupted data
         }
     }
 

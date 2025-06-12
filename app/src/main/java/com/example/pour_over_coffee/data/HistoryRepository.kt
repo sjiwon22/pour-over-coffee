@@ -57,16 +57,20 @@ object HistoryRepository {
         val json = prefs?.getString(KEY_HISTORY, null)
         history.clear()
         if (json.isNullOrEmpty()) return
-        val array = JSONArray(json)
-        for (i in 0 until array.length()) {
-            val obj = array.getJSONObject(i)
-            history += HistoryEntry(
-                id = obj.getString("id"),
-                name = obj.getString("name"),
-                waterAmount = obj.getInt("waterAmount"),
-                timestamp = obj.getLong("timestamp"),
-                score = if (obj.has("score") && !obj.isNull("score")) obj.getInt("score") else null
-            )
+        try {
+            val array = JSONArray(json)
+            for (i in 0 until array.length()) {
+                val obj = array.getJSONObject(i)
+                history += HistoryEntry(
+                    id = obj.getString("id"),
+                    name = obj.getString("name"),
+                    waterAmount = obj.getInt("waterAmount"),
+                    timestamp = obj.getLong("timestamp"),
+                    score = if (obj.has("score") && !obj.isNull("score")) obj.getInt("score") else null
+                )
+            }
+        } catch (_: Exception) {
+            // Corrupt data, ignore
         }
     }
 
