@@ -21,7 +21,7 @@ fun MainMenuScreen(onMakeCoffee: () -> Unit, onEditRecipe: () -> Unit) {
         modifier = Modifier
             .fillMaxSize()
             .statusBarsPadding()
-            .padding(start = 16.dp, top = 16.dp),
+            .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.Top),
         horizontalAlignment = Alignment.Start
     ) {
