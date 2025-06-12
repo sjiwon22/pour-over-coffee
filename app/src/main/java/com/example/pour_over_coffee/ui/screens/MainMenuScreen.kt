@@ -16,7 +16,11 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun MainMenuScreen(onMakeCoffee: () -> Unit, onEditRecipe: () -> Unit) {
+fun MainMenuScreen(
+    onMakeCoffee: () -> Unit,
+    onEditRecipe: () -> Unit,
+    onHistory: () -> Unit
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -42,6 +46,15 @@ fun MainMenuScreen(onMakeCoffee: () -> Unit, onEditRecipe: () -> Unit) {
             shape = RoundedCornerShape(4.dp)
         ) {
             Text("Edit recipe")
+        }
+        Button(
+            modifier = Modifier
+                .fillMaxWidth(0.25f)
+                .aspectRatio(2f),
+            onClick = onHistory,
+            shape = RoundedCornerShape(4.dp)
+        ) {
+            Text("History")
         }
     }
 }

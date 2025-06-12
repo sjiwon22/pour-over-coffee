@@ -28,6 +28,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.unit.dp
 import com.example.pour_over_coffee.data.Recipe
 import com.example.pour_over_coffee.data.RecipeRepository
+import com.example.pour_over_coffee.data.HistoryRepository
 import kotlinx.coroutines.delay
 
 @Composable
@@ -78,7 +79,10 @@ fun MakeCoffeeScreen(onDone: () -> Unit) {
             ) {
                 items(recipes) { recipe ->
                     Button(
-                        onClick = { selected.value = recipe },
+                        onClick = {
+                            selected.value = recipe
+                            HistoryRepository.addEntry(recipe.name)
+                        },
                         modifier = Modifier.aspectRatio(2f),
                         shape = RoundedCornerShape(4.dp)
                     ) { Text(recipe.name) }
