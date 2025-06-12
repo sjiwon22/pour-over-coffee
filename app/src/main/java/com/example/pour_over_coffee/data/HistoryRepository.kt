@@ -3,6 +3,7 @@ package com.example.pour_over_coffee.data
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.compose.runtime.mutableStateListOf
+import com.example.pour_over_coffee.data.Recipe
 import org.json.JSONArray
 import org.json.JSONObject
 
@@ -24,10 +25,17 @@ object HistoryRepository {
         }
     }
 
-    fun addEntry(name: String) {
+    fun addEntry(recipe: Recipe) {
         if (!loaded) load()
-        // prepend newest at start
-        history.add(0, HistoryEntry(name = name))
+        val totalWater = recipe.steps.sumOf { it.waterAmount }
+        history.add(
+            0,
+            HistoryEntry(
+                name = recipe.name,
+                waterAmount = totalWater,
+                timestamp = System.currentTimeMillis()
+            )
+        )
         save()
     }
 
@@ -55,6 +63,8 @@ object HistoryRepository {
             history += HistoryEntry(
                 id = obj.getString("id"),
                 name = obj.getString("name"),
+                waterAmount = obj.getInt("waterAmount"),
+                timestamp = obj.getLong("timestamp"),
                 score = if (obj.has("score") && !obj.isNull("score")) obj.getInt("score") else null
             )
         }
@@ -67,6 +77,8 @@ object HistoryRepository {
             val obj = JSONObject()
             obj.put("id", entry.id)
             obj.put("name", entry.name)
+            obj.put("waterAmount", entry.waterAmount)
+            obj.put("timestamp", entry.timestamp)
             if (entry.score != null) obj.put("score", entry.score)
             array.put(obj)
         }
@@ -77,5 +89,7 @@ object HistoryRepository {
 data class HistoryEntry(
     val id: String = java.util.UUID.randomUUID().toString(),
     val name: String,
+    val waterAmount: Int,
+    val timestamp: Long,
     var score: Int? = null
 )

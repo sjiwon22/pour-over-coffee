@@ -20,6 +20,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.unit.dp
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 import com.example.pour_over_coffee.data.HistoryEntry
 import com.example.pour_over_coffee.data.HistoryRepository
 
@@ -28,6 +31,7 @@ fun HistoryScreen(onBack: () -> Unit) {
     val history = HistoryRepository.getHistory()
     val editing: MutableState<HistoryEntry?> = remember { mutableStateOf(null) }
     val scoreText = remember { mutableStateOf("") }
+    val format = remember { SimpleDateFormat("yy/MM/dd HH:mm", Locale.getDefault()) }
 
     Column(
         modifier = Modifier
@@ -48,7 +52,9 @@ fun HistoryScreen(onBack: () -> Unit) {
                 },
                 shape = RoundedCornerShape(4.dp)
             ) {
-                val label = if (entry.score != null) "${entry.name} (score ${entry.score})" else entry.name
+                val time = format.format(Date(entry.timestamp))
+                val base = "${entry.name} ${entry.waterAmount}ml $time"
+                val label = if (entry.score != null) "$base (score ${entry.score})" else base
                 Text(label)
             }
         }

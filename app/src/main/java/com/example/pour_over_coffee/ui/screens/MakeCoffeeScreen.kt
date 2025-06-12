@@ -81,7 +81,7 @@ fun MakeCoffeeScreen(onDone: () -> Unit) {
                     Button(
                         onClick = {
                             selected.value = recipe
-                            HistoryRepository.addEntry(recipe.name)
+                            HistoryRepository.addEntry(recipe)
                         },
                         modifier = Modifier.aspectRatio(2f),
                         shape = RoundedCornerShape(4.dp)
