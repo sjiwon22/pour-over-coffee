@@ -5,6 +5,9 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.material3.Surface
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.gestures.detectHorizontalDragGestures
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -39,7 +42,7 @@ fun App() {
         val screen = remember { mutableStateOf(Screen.MAIN) }
         val editingRecipe = remember { mutableStateOf<Recipe?>(null) }
 
-        BackHandler(enabled = screen.value != Screen.MAIN) {
+        fun goBack() {
             when (screen.value) {
                 Screen.LIST, Screen.BREW, Screen.HISTORY, Screen.RANKING ->
                     screen.value = Screen.MAIN
@@ -48,7 +51,27 @@ fun App() {
             }
         }
 
-        Surface {
+        BackHandler(enabled = screen.value != Screen.MAIN) {
+            goBack()
+        }
+
+        var drag by remember { mutableStateOf(0f) }
+
+        Box(
+            modifier = Modifier.pointerInput(screen.value) {
+                detectHorizontalDragGestures(
+                    onHorizontalDrag = { _, delta -> drag += delta },
+                    onDragEnd = {
+                        if (drag > 100f) {
+                            goBack()
+                        }
+                        drag = 0f
+                    },
+                    onDragCancel = { drag = 0f }
+                )
+            }
+        ) {
+            Surface {
             when (screen.value) {
                 Screen.MAIN -> MainMenuScreen(
                     onMakeCoffee = { screen.value = Screen.BREW },
