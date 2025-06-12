@@ -27,7 +27,7 @@ object HistoryRepository {
     fun addEntry(name: String) {
         if (!loaded) load()
         // prepend newest at start
-        history.add(0, HistoryEntry(name))
+        history.add(0, HistoryEntry(name = name))
         save()
     }
 
