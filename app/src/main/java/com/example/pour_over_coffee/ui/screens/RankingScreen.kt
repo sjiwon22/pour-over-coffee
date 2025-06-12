@@ -1,6 +1,8 @@
 package com.example.pour_over_coffee.ui.screens
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -18,6 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.graphics.Color
 import com.example.pour_over_coffee.data.HistoryRepository
 import com.example.pour_over_coffee.data.RankingStat
 
@@ -25,6 +28,7 @@ enum class RankColumn { NAME, WATER, SCORE, COUNT }
 
 @Composable
 fun RankingScreen(onBack: () -> Unit) {
+    HistoryRepository.getHistory() // observe changes
     val stats = HistoryRepository.getStats()
     val sortColumn = remember { mutableStateOf(RankColumn.SCORE) }
     val ascending = remember { mutableStateOf(false) }
@@ -49,7 +53,10 @@ fun RankingScreen(onBack: () -> Unit) {
         horizontalAlignment = Alignment.Start
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(Color.LightGray)
+                .border(1.dp, Color.Gray),
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             Text("Recipe", modifier = Modifier.weight(1f).clickable {
@@ -67,7 +74,10 @@ fun RankingScreen(onBack: () -> Unit) {
         }
         sorted.forEach { stat ->
             Row(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .border(1.dp, Color.Gray)
+                    .clickable { HistoryRepository.clearScoresForRecipe(stat.name) },
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 Text(stat.name, modifier = Modifier.weight(1f))

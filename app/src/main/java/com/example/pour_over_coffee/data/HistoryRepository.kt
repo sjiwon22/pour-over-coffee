@@ -65,6 +65,17 @@ object HistoryRepository {
         }
     }
 
+    fun clearScoresForRecipe(name: String) {
+        var changed = false
+        history.forEachIndexed { idx, entry ->
+            if (entry.name == name && entry.score != null) {
+                history[idx] = entry.copy(score = null)
+                changed = true
+            }
+        }
+        if (changed) save()
+    }
+
     private fun load() {
         loaded = true
         val json = prefs?.getString(KEY_HISTORY, null)
