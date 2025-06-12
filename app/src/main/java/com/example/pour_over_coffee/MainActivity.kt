@@ -72,7 +72,7 @@ fun App() {
             }
         ) {
             Surface {
-            when (screen.value) {
+                when (screen.value) {
                 Screen.MAIN -> MainMenuScreen(
                     onMakeCoffee = { screen.value = Screen.BREW },
                     onEditRecipe = { screen.value = Screen.LIST },
@@ -110,7 +110,12 @@ fun App() {
             }
         }
     }
+    // Close PourovercoffeeTheme
 }
+
+// Close App composable
+}
+
 
 @Preview
 @Composable
