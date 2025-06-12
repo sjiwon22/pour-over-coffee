@@ -32,7 +32,7 @@ fun MainMenuScreen(
     ) {
         Button(
             modifier = Modifier
-                .fillMaxWidth(0.25f)
+                .fillMaxWidth(0.5f)
                 .aspectRatio(2f),
             onClick = onMakeCoffee,
             shape = RoundedCornerShape(4.dp)
@@ -41,7 +41,7 @@ fun MainMenuScreen(
         }
         Button(
             modifier = Modifier
-                .fillMaxWidth(0.25f)
+                .fillMaxWidth(0.5f)
                 .aspectRatio(2f),
             onClick = onEditRecipe,
             shape = RoundedCornerShape(4.dp)
@@ -50,7 +50,7 @@ fun MainMenuScreen(
         }
         Button(
             modifier = Modifier
-                .fillMaxWidth(0.25f)
+                .fillMaxWidth(0.5f)
                 .aspectRatio(2f),
             onClick = onHistory,
             shape = RoundedCornerShape(4.dp)
@@ -59,7 +59,7 @@ fun MainMenuScreen(
         }
         Button(
             modifier = Modifier
-                .fillMaxWidth(0.25f)
+                .fillMaxWidth(0.5f)
                 .aspectRatio(2f),
             onClick = onRanking,
             shape = RoundedCornerShape(4.dp)

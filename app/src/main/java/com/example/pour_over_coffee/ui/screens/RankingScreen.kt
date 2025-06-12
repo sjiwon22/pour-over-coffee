@@ -90,7 +90,7 @@ fun RankingScreen(onBack: () -> Unit) {
         TextButton(
             onClick = onBack,
             modifier = Modifier
-                .fillMaxWidth(0.25f)
+                .fillMaxWidth(0.5f)
                 .aspectRatio(2f),
             shape = RoundedCornerShape(4.dp)
         ) {

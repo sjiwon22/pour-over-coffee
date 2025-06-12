@@ -47,7 +47,7 @@ fun RecipeListScreen(
         recipes.forEach { recipe ->
             Button(
                 modifier = Modifier
-                    .fillMaxWidth(0.25f)
+                    .fillMaxWidth(0.5f)
                     .aspectRatio(2f)
                     .padding(vertical = 4.dp)
                     .combinedClickable(
@@ -62,7 +62,7 @@ fun RecipeListScreen(
         }
         Button(
             modifier = Modifier
-                .fillMaxWidth(0.25f)
+                .fillMaxWidth(0.5f)
                 .aspectRatio(2f)
                 .padding(vertical = 4.dp),
             onClick = onAdd,
@@ -73,7 +73,7 @@ fun RecipeListScreen(
         TextButton(
             onClick = onBack,
             modifier = Modifier
-                .fillMaxWidth(0.25f)
+                .fillMaxWidth(0.5f)
                 .aspectRatio(2f),
             shape = RoundedCornerShape(4.dp)
         ) {

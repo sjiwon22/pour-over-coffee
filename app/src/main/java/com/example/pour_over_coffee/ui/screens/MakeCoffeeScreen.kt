@@ -91,7 +91,7 @@ fun MakeCoffeeScreen(onDone: () -> Unit) {
             TextButton(
                 onClick = onDone,
                 modifier = Modifier
-                    .fillMaxWidth(0.25f)
+                    .fillMaxWidth(0.5f)
                     .aspectRatio(2f),
                 shape = RoundedCornerShape(4.dp)
             ) { Text("Back") }
@@ -128,7 +128,7 @@ fun MakeCoffeeScreen(onDone: () -> Unit) {
                     enabled = enabled,
                     colors = colors,
                     modifier = Modifier
-                        .fillMaxWidth(0.25f)
+                        .fillMaxWidth(0.5f)
                         .aspectRatio(2f),
                     shape = RoundedCornerShape(4.dp)
                 ) { Text(label) }
@@ -137,7 +137,7 @@ fun MakeCoffeeScreen(onDone: () -> Unit) {
                 Button(
                     onClick = {},
                     modifier = Modifier
-                        .fillMaxWidth(0.25f)
+                        .fillMaxWidth(0.5f)
                         .aspectRatio(2f),
                     shape = RoundedCornerShape(4.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF9CCC65))
@@ -146,7 +146,7 @@ fun MakeCoffeeScreen(onDone: () -> Unit) {
             TextButton(
                 onClick = { selected.value = null },
                 modifier = Modifier
-                    .fillMaxWidth(0.25f)
+                    .fillMaxWidth(0.5f)
                     .aspectRatio(2f),
                 shape = RoundedCornerShape(4.dp)
             ) { Text("Back") }

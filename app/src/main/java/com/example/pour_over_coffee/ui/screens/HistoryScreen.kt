@@ -44,7 +44,7 @@ fun HistoryScreen(onBack: () -> Unit) {
         history.forEach { entry ->
             Button(
                 modifier = Modifier
-                    .fillMaxWidth(0.25f)
+                    .fillMaxWidth(0.5f)
                     .aspectRatio(2f),
                 onClick = {
                     editing.value = entry
@@ -61,7 +61,7 @@ fun HistoryScreen(onBack: () -> Unit) {
         TextButton(
             onClick = onBack,
             modifier = Modifier
-                .fillMaxWidth(0.25f)
+                .fillMaxWidth(0.5f)
                 .aspectRatio(2f),
             shape = RoundedCornerShape(4.dp)
         ) {
