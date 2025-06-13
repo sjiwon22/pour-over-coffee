@@ -4,13 +4,14 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -44,35 +45,37 @@ fun RankingScreen(onBack: () -> Unit) {
         if (ascending.value) list else list.reversed()
     }
 
-    Column(
+    LazyColumn(
         modifier = Modifier
             .fillMaxSize()
             .statusBarsPadding()
             .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.Top),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
         horizontalAlignment = Alignment.Start
     ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(Color.LightGray)
-                .border(1.dp, Color.Gray),
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            Text("Recipe", modifier = Modifier.weight(1f).clickable {
-                toggleSort(sortColumn, ascending, RankColumn.NAME)
-            })
-            Text("Water", modifier = Modifier.weight(1f).clickable {
-                toggleSort(sortColumn, ascending, RankColumn.WATER)
-            })
-            Text("Score", modifier = Modifier.weight(1f).clickable {
-                toggleSort(sortColumn, ascending, RankColumn.SCORE)
-            })
-            Text("Count", modifier = Modifier.weight(1f).clickable {
-                toggleSort(sortColumn, ascending, RankColumn.COUNT)
-            })
+        item {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(Color.LightGray)
+                    .border(1.dp, Color.Gray),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Text("Recipe", modifier = Modifier.weight(1f).clickable {
+                    toggleSort(sortColumn, ascending, RankColumn.NAME)
+                })
+                Text("Water", modifier = Modifier.weight(1f).clickable {
+                    toggleSort(sortColumn, ascending, RankColumn.WATER)
+                })
+                Text("Score", modifier = Modifier.weight(1f).clickable {
+                    toggleSort(sortColumn, ascending, RankColumn.SCORE)
+                })
+                Text("Count", modifier = Modifier.weight(1f).clickable {
+                    toggleSort(sortColumn, ascending, RankColumn.COUNT)
+                })
+            }
         }
-        sorted.forEach { stat ->
+        items(sorted) { stat ->
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -87,14 +90,16 @@ fun RankingScreen(onBack: () -> Unit) {
                 Text("${stat.count}", modifier = Modifier.weight(1f))
             }
         }
-        TextButton(
-            onClick = onBack,
-            modifier = Modifier
-                .fillMaxWidth(0.5f)
-                .aspectRatio(2f),
-            shape = RoundedCornerShape(4.dp)
-        ) {
-            Text("Back")
+        item {
+            TextButton(
+                onClick = onBack,
+                modifier = Modifier
+                    .fillMaxWidth(0.5f)
+                    .aspectRatio(2f),
+                shape = RoundedCornerShape(4.dp)
+            ) {
+                Text("Back")
+            }
         }
     }
 }
