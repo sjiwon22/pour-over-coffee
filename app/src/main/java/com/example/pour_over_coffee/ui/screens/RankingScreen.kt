@@ -59,18 +59,42 @@ fun RankingScreen(onBack: () -> Unit) {
                     .background(Color.LightGray),
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                Text("Recipe", modifier = Modifier.weight(1f).clickable {
-                    toggleSort(sortColumn, ascending, RankColumn.NAME)
-                })
-                Text("Water", modifier = Modifier.weight(1f).clickable {
-                    toggleSort(sortColumn, ascending, RankColumn.WATER)
-                })
-                Text("Score", modifier = Modifier.weight(1f).clickable {
-                    toggleSort(sortColumn, ascending, RankColumn.SCORE)
-                })
-                Text("Count", modifier = Modifier.weight(1f).clickable {
-                    toggleSort(sortColumn, ascending, RankColumn.COUNT)
-                })
+                Text(
+                    "Recipe",
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(vertical = 4.dp)
+                        .clickable {
+                            toggleSort(sortColumn, ascending, RankColumn.NAME)
+                        }
+                )
+                Text(
+                    "Water",
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(vertical = 4.dp)
+                        .clickable {
+                            toggleSort(sortColumn, ascending, RankColumn.WATER)
+                        }
+                )
+                Text(
+                    "Score",
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(vertical = 4.dp)
+                        .clickable {
+                            toggleSort(sortColumn, ascending, RankColumn.SCORE)
+                        }
+                )
+                Text(
+                    "Count",
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(vertical = 4.dp)
+                        .clickable {
+                            toggleSort(sortColumn, ascending, RankColumn.COUNT)
+                        }
+                )
             }
         }
         items(sorted) { stat ->
@@ -80,11 +104,11 @@ fun RankingScreen(onBack: () -> Unit) {
                     .clickable { HistoryRepository.clearScoresForRecipe(stat.name) },
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                Text(stat.name, modifier = Modifier.weight(1f))
-                Text("${stat.waterAmount}", modifier = Modifier.weight(1f))
+                Text(stat.name, modifier = Modifier.weight(1f).padding(vertical = 4.dp))
+                Text("${stat.waterAmount}", modifier = Modifier.weight(1f).padding(vertical = 4.dp))
                 val scoreStr = String.format("%.1f", stat.averageScore)
-                Text(scoreStr, modifier = Modifier.weight(1f))
-                Text("${stat.count}", modifier = Modifier.weight(1f))
+                Text(scoreStr, modifier = Modifier.weight(1f).padding(vertical = 4.dp))
+                Text("${stat.count}", modifier = Modifier.weight(1f).padding(vertical = 4.dp))
             }
         }
         item {
