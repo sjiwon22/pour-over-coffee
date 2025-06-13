@@ -2,7 +2,6 @@ package com.example.pour_over_coffee.ui.screens
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -57,8 +56,7 @@ fun RankingScreen(onBack: () -> Unit) {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(Color.LightGray)
-                    .border(1.dp, Color.Gray),
+                    .background(Color.LightGray),
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 Text("Recipe", modifier = Modifier.weight(1f).clickable {
@@ -79,7 +77,6 @@ fun RankingScreen(onBack: () -> Unit) {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .border(1.dp, Color.Gray)
                     .clickable { HistoryRepository.clearScoresForRecipe(stat.name) },
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
