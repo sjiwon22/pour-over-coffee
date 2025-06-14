@@ -19,7 +19,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.compose.material3.ButtonDefaults
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -45,7 +47,7 @@ fun HistoryScreen(onBack: () -> Unit) {
             Button(
                 modifier = Modifier
                     .fillMaxWidth(0.5f)
-                    .aspectRatio(2f),
+                    .aspectRatio(4f),
                 onClick = {
                     editing.value = entry
                     scoreText.value = entry.score?.toString() ?: ""
@@ -62,19 +64,11 @@ fun HistoryScreen(onBack: () -> Unit) {
             onClick = { HistoryRepository.clearHistory() },
             modifier = Modifier
                 .fillMaxWidth(0.5f)
-                .aspectRatio(2f),
-            shape = RoundedCornerShape(4.dp)
+                .aspectRatio(4f),
+            shape = RoundedCornerShape(4.dp),
+            colors = ButtonDefaults.textButtonColors(containerColor = Color.LightGray)
         ) {
             Text("Clear")
-        }
-        TextButton(
-            onClick = onBack,
-            modifier = Modifier
-                .fillMaxWidth(0.5f)
-                .aspectRatio(2f),
-            shape = RoundedCornerShape(4.dp)
-        ) {
-            Text("Back")
         }
     }
 

@@ -100,11 +100,7 @@ fun RecipeEditScreen(
             }
         }
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-            TextButton(
-                onClick = onDone,
-                modifier = Modifier.fillMaxWidth(0.5f).aspectRatio(2f),
-                shape = RoundedCornerShape(4.dp)
-            ) { Text("Back") }
+            // Back button removed
             if (recipe != null) {
                 TextButton(
                     onClick = { onDelete(recipe) },

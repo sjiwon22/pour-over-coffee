@@ -14,7 +14,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
@@ -92,13 +91,7 @@ fun MakeCoffeeScreen(onDone: () -> Unit) {
                     ) { Text(label) }
                 }
             }
-            TextButton(
-                onClick = onDone,
-                modifier = Modifier
-                    .fillMaxWidth(0.5f)
-                    .aspectRatio(2f),
-                shape = RoundedCornerShape(4.dp)
-            ) { Text("Back") }
+            // Back button removed
         }
     } else {
         val recipe = selected.value!!
@@ -147,13 +140,7 @@ fun MakeCoffeeScreen(onDone: () -> Unit) {
                     colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF9CCC65))
                 ) { Text("Have a good coffee") }
             }
-            TextButton(
-                onClick = { selected.value = null },
-                modifier = Modifier
-                    .fillMaxWidth(0.5f)
-                    .aspectRatio(2f),
-                shape = RoundedCornerShape(4.dp)
-            ) { Text("Back") }
+            // Back button removed
         }
     }
 }

@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -110,17 +109,7 @@ fun RankingScreen(onBack: () -> Unit) {
                 Text("${stat.count}", modifier = Modifier.weight(1f).padding(vertical = 4.dp))
             }
         }
-        item {
-            TextButton(
-                onClick = onBack,
-                modifier = Modifier
-                    .fillMaxWidth(0.5f)
-                    .aspectRatio(2f),
-                shape = RoundedCornerShape(4.dp)
-            ) {
-                Text("Back")
-            }
-        }
+        // Back button removed
     }
 }
 
