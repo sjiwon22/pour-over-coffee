@@ -26,6 +26,7 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.ButtonDefaults
 import com.example.pour_over_coffee.ui.components.NumberPicker
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
@@ -130,7 +131,7 @@ fun RecipeEditScreen(
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(vertical = 4.dp)
+                                .padding(vertical = 8.dp)
                                 .clickable {
                                     editingIndex = index
                                     editingWater = step.waterAmount
@@ -161,7 +162,8 @@ fun RecipeEditScreen(
                         .fillMaxWidth(0.5f)
                         .aspectRatio(2.8f)
                         .padding(vertical = 4.dp),
-                    shape = RoundedCornerShape(4.dp)
+                    shape = RoundedCornerShape(4.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = Color.LightGray)
                 ) { Text("Add step") }
             }
         }
