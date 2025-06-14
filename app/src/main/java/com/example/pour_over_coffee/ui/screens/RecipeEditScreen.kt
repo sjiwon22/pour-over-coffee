@@ -96,7 +96,8 @@ fun RecipeEditScreen(
                             editingWater = step.waterAmount
                             editingTime = step.timeSec
                         },
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text("Step ${index + 1}")
                     Text(
@@ -163,19 +164,26 @@ fun RecipeEditScreen(
                 },
                 title = { Text("Edit Step ${idx + 1}") },
                 text = {
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Text("Water (ml)")
-                        NumberPicker(
-                            value = editingWater,
-                            onValueChange = { editingWater = it },
-                            range = 0..500
-                        )
-                        Text("Time (s)")
-                        NumberPicker(
-                            value = editingTime,
-                            onValueChange = { editingTime = it },
-                            range = 0..120
-                        )
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(16.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                            Text("Water (ml)")
+                            NumberPicker(
+                                value = editingWater,
+                                onValueChange = { editingWater = it },
+                                range = 0..500
+                            )
+                        }
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                            Text("Time (s)")
+                            NumberPicker(
+                                value = editingTime,
+                                onValueChange = { editingTime = it },
+                                range = 0..120
+                            )
+                        }
                     }
                 }
             )
