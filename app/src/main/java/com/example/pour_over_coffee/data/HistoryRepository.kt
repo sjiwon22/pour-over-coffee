@@ -81,6 +81,14 @@ object HistoryRepository {
         }
     }
 
+    fun clearHistory() {
+        if (!loaded) load()
+        if (history.isNotEmpty()) {
+            history.clear()
+            save()
+        }
+    }
+
     private fun load() {
         loaded = true
         val json = prefs?.getString(KEY_HISTORY, null)

@@ -59,6 +59,15 @@ fun HistoryScreen(onBack: () -> Unit) {
             }
         }
         TextButton(
+            onClick = { HistoryRepository.clearHistory() },
+            modifier = Modifier
+                .fillMaxWidth(0.5f)
+                .aspectRatio(2f),
+            shape = RoundedCornerShape(4.dp)
+        ) {
+            Text("Clear")
+        }
+        TextButton(
             onClick = onBack,
             modifier = Modifier
                 .fillMaxWidth(0.5f)

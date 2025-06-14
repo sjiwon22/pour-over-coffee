@@ -100,8 +100,7 @@ fun RankingScreen(onBack: () -> Unit) {
         items(sorted) { stat ->
             Row(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable { HistoryRepository.clearScoresForRecipe(stat.name) },
+                    .fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 Text(stat.name, modifier = Modifier.weight(1f).padding(vertical = 4.dp))
