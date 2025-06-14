@@ -30,6 +30,9 @@ import com.example.pour_over_coffee.data.Recipe
 import com.example.pour_over_coffee.data.RecipeRepository
 import com.example.pour_over_coffee.data.Step
 
+enum class StepField { WATER, TIME }
+data class EditInfo(val index: Int, val field: StepField)
+
 @Composable
 fun RecipeEditScreen(
     recipe: Recipe?,
@@ -44,8 +47,6 @@ fun RecipeEditScreen(
             recipe?.steps?.forEach { add(it.copy()) }
         }
     }
-    enum class StepField { WATER, TIME }
-    data class EditInfo(val index: Int, val field: StepField)
     var editing by remember { mutableStateOf<EditInfo?>(null) }
 
     Column(
