@@ -101,7 +101,7 @@ fun RecipeEditScreen(
                 @OptIn(ExperimentalMaterialApi::class)
                 val dismissState = rememberDismissState(
                     confirmStateChange = {
-                        if (it == DismissValue.DismissedToStart) {
+                        if (it == DismissValue.DismissedToEnd) {
                             steps.removeAt(index)
                             false
                         } else {
@@ -112,15 +112,15 @@ fun RecipeEditScreen(
 
                 SwipeToDismiss(
                     state = dismissState,
-                    directions = setOf(DismissDirection.EndToStart),
+                    directions = setOf(DismissDirection.StartToEnd),
                     background = {
                         val color = if (dismissState.targetValue == DismissValue.Default) Color.Transparent else Color.Red
                         Row(
                             modifier = Modifier
                                 .fillMaxSize()
                                 .background(color)
-                                .padding(end = 16.dp),
-                            horizontalArrangement = Arrangement.End,
+                                .padding(start = 16.dp),
+                            horizontalArrangement = Arrangement.Start,
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Icon(Icons.Default.Delete, contentDescription = "Delete", tint = Color.White)
@@ -159,7 +159,7 @@ fun RecipeEditScreen(
                     onClick = { steps.add(Step(30, 30)) },
                     modifier = Modifier
                         .fillMaxWidth(0.5f)
-                        .aspectRatio(2f)
+                        .aspectRatio(2.8f)
                         .padding(vertical = 4.dp),
                     shape = RoundedCornerShape(4.dp)
                 ) { Text("Add step") }
@@ -220,7 +220,8 @@ fun RecipeEditScreen(
                             NumberPicker(
                                 value = editingTime,
                                 onValueChange = { editingTime = it },
-                                range = 0..120
+                                range = 0..120,
+                                step = 5
                             )
                         }
                     }
