@@ -1,16 +1,23 @@
 package com.example.pour_over_coffee.ui.screens
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.ArrowDropUp
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Divider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -48,66 +55,44 @@ fun RankingScreen(onBack: () -> Unit) {
             .fillMaxSize()
             .statusBarsPadding()
             .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp),
-        horizontalAlignment = Alignment.Start
+        verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         item {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(Color.LightGray),
+                    .background(Color.LightGray)
+                    .padding(vertical = 4.dp),
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                Text(
-                    "Recipe",
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(vertical = 4.dp)
-                        .clickable {
-                            toggleSort(sortColumn, ascending, RankColumn.NAME)
-                        }
-                )
-                Text(
-                    "Water",
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(vertical = 4.dp)
-                        .clickable {
-                            toggleSort(sortColumn, ascending, RankColumn.WATER)
-                        }
-                )
-                Text(
-                    "Score",
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(vertical = 4.dp)
-                        .clickable {
-                            toggleSort(sortColumn, ascending, RankColumn.SCORE)
-                        }
-                )
-                Text(
-                    "Count",
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(vertical = 4.dp)
-                        .clickable {
-                            toggleSort(sortColumn, ascending, RankColumn.COUNT)
-                        }
-                )
+                HeaderCell("Recipe", RankColumn.NAME, sortColumn, ascending)
+                HeaderCell("Water", RankColumn.WATER, sortColumn, ascending)
+                HeaderCell("Score", RankColumn.SCORE, sortColumn, ascending)
+                HeaderCell("Count", RankColumn.COUNT, sortColumn, ascending)
             }
         }
-        items(sorted) { stat ->
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
+        itemsIndexed(sorted) { index, stat ->
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(4.dp),
+                elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
             ) {
-                Text(stat.name, modifier = Modifier.weight(1f).padding(vertical = 4.dp))
-                Text("${stat.waterAmount}", modifier = Modifier.weight(1f).padding(vertical = 4.dp))
-                val scoreStr = String.format("%.1f", stat.averageScore)
-                Text(scoreStr, modifier = Modifier.weight(1f).padding(vertical = 4.dp))
-                Text("${stat.count}", modifier = Modifier.weight(1f).padding(vertical = 4.dp))
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text("${index + 1}", modifier = Modifier.width(24.dp))
+                    Text(stat.name, modifier = Modifier.weight(1f))
+                    Text("${stat.waterAmount}", modifier = Modifier.weight(1f))
+                    val scoreStr = String.format("%.1f", stat.averageScore)
+                    Text(scoreStr, modifier = Modifier.weight(1f))
+                    Text("${stat.count}", modifier = Modifier.weight(1f))
+                }
             }
+            Divider()
         }
         // Back button removed
     }
@@ -119,5 +104,26 @@ private fun toggleSort(colState: androidx.compose.runtime.MutableState<RankColum
     } else {
         colState.value = column
         ascState.value = true
+    }
+}
+
+@Composable
+private fun HeaderCell(
+    title: String,
+    column: RankColumn,
+    sortColumn: androidx.compose.runtime.MutableState<RankColumn>,
+    ascending: androidx.compose.runtime.MutableState<Boolean>
+) {
+    Row(
+        modifier = Modifier
+            .weight(1f)
+            .clickable { toggleSort(sortColumn, ascending, column) },
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(title)
+        if (sortColumn.value == column) {
+            val icon = if (ascending.value) Icons.Filled.ArrowDropUp else Icons.Filled.ArrowDropDown
+            Icon(icon, contentDescription = null)
+        }
     }
 }
