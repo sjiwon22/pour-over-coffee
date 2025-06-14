@@ -47,7 +47,7 @@ fun HistoryScreen(onBack: () -> Unit) {
             Button(
                 modifier = Modifier
                     .fillMaxWidth(0.5f)
-                    .aspectRatio(4f),
+                    .aspectRatio(2f),
                 onClick = {
                     editing.value = entry
                     scoreText.value = entry.score?.toString() ?: ""
@@ -64,7 +64,7 @@ fun HistoryScreen(onBack: () -> Unit) {
             onClick = { HistoryRepository.clearHistory() },
             modifier = Modifier
                 .fillMaxWidth(0.5f)
-                .aspectRatio(4f),
+                .aspectRatio(2f),
             shape = RoundedCornerShape(4.dp),
             colors = ButtonDefaults.textButtonColors(containerColor = Color.LightGray)
         ) {
