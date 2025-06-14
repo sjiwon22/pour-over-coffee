@@ -101,7 +101,7 @@ fun RecipeEditScreen(
                 @OptIn(ExperimentalMaterialApi::class)
                 val dismissState = rememberDismissState(
                     confirmStateChange = {
-                        if (it == DismissValue.DismissedToEnd) {
+                        if (it == DismissValue.DismissedToStart) {
                             steps.removeAt(index)
                             false
                         } else {
@@ -112,15 +112,15 @@ fun RecipeEditScreen(
 
                 SwipeToDismiss(
                     state = dismissState,
-                    directions = setOf(DismissDirection.StartToEnd),
+                    directions = setOf(DismissDirection.EndToStart),
                     background = {
                         val color = if (dismissState.targetValue == DismissValue.Default) Color.Transparent else Color.Red
                         Row(
                             modifier = Modifier
                                 .fillMaxSize()
                                 .background(color)
-                                .padding(start = 16.dp),
-                            horizontalArrangement = Arrangement.Start,
+                                .padding(end = 16.dp),
+                            horizontalArrangement = Arrangement.End,
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Icon(Icons.Default.Delete, contentDescription = "Delete", tint = Color.White)
