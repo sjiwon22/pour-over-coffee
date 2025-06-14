@@ -11,6 +11,14 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.clickable
+import androidx.compose.material.SwipeToDismiss
+import androidx.compose.material.DismissDirection
+import androidx.compose.material.DismissValue
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.rememberDismissState
+import androidx.compose.material.Icon
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Button
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.OutlinedTextField
@@ -26,6 +34,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.Alignment
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.pour_over_coffee.data.Recipe
 import com.example.pour_over_coffee.data.RecipeRepository
@@ -87,33 +96,61 @@ fun RecipeEditScreen(
         Text("Steps")
         LazyColumn(modifier = Modifier.weight(1f, true)) {
             itemsIndexed(steps) { index, step ->
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 4.dp)
-                        .clickable {
-                            editingIndex = index
-                            editingWater = step.waterAmount
-                            editingTime = step.timeSec
-                        },
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text("Step ${index + 1}")
-                    Text(
-                        "Water ${step.waterAmount}ml",
-                        modifier = Modifier
-                            .weight(1f)
-                    )
-                    Text(
-                        "Time ${step.timeSec}s",
-                        modifier = Modifier
-                            .weight(1f)
-                    )
-                    TextButton(onClick = { steps.removeAt(index) }) {
-                        Text("Delete")
+                @OptIn(ExperimentalMaterialApi::class)
+                val dismissState = rememberDismissState(
+                    confirmStateChange = {
+                        if (it == DismissValue.DismissedToStart) {
+                            steps.removeAt(index)
+                            false
+                        } else {
+                            true
+                        }
                     }
-                }
+                )
+
+                SwipeToDismiss(
+                    state = dismissState,
+                    directions = setOf(DismissDirection.EndToStart),
+                    background = {
+                        val color = if (dismissState.targetValue == DismissValue.Default) Color.Transparent else Color.Red
+                        Row(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .background(color)
+                                .padding(end = 16.dp),
+                            horizontalArrangement = Arrangement.End,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Icon(Icons.Default.Delete, contentDescription = "Delete", tint = Color.White)
+                        }
+                    },
+                    dismissContent = {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 4.dp)
+                                .clickable {
+                                    editingIndex = index
+                                    editingWater = step.waterAmount
+                                    editingTime = step.timeSec
+                                },
+                            horizontalArrangement = Arrangement.spacedBy(8.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text("Step ${index + 1}")
+                            Text(
+                                "Water ${step.waterAmount}ml",
+                                modifier = Modifier
+                                    .weight(1f)
+                            )
+                            Text(
+                                "Time ${step.timeSec}s",
+                                modifier = Modifier
+                                    .weight(1f)
+                            )
+                        }
+                    }
+                )
             }
             item {
                 Button(
