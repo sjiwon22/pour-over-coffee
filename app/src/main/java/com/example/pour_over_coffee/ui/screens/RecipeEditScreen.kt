@@ -31,8 +31,6 @@ import com.example.pour_over_coffee.data.Recipe
 import com.example.pour_over_coffee.data.RecipeRepository
 import com.example.pour_over_coffee.data.Step
 
-enum class StepField { WATER, TIME }
-data class EditInfo(val index: Int, val field: StepField)
 
 @Composable
 fun RecipeEditScreen(
@@ -48,7 +46,9 @@ fun RecipeEditScreen(
             recipe?.steps?.forEach { add(it.copy()) }
         }
     }
-    var editing by remember { mutableStateOf<EditInfo?>(null) }
+    var editingIndex by remember { mutableStateOf<Int?>(null) }
+    var editingWater by remember { mutableStateOf(0) }
+    var editingTime by remember { mutableStateOf(0) }
 
     Column(
         modifier = Modifier
@@ -90,7 +90,12 @@ fun RecipeEditScreen(
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(vertical = 4.dp),
+                        .padding(vertical = 4.dp)
+                        .clickable {
+                            editingIndex = index
+                            editingWater = step.waterAmount
+                            editingTime = step.timeSec
+                        },
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     Text("Step ${index + 1}")
@@ -98,13 +103,11 @@ fun RecipeEditScreen(
                         "Water ${step.waterAmount}ml",
                         modifier = Modifier
                             .weight(1f)
-                            .clickable { editing = EditInfo(index, StepField.WATER) }
                     )
                     Text(
                         "Time ${step.timeSec}s",
                         modifier = Modifier
                             .weight(1f)
-                            .clickable { editing = EditInfo(index, StepField.TIME) }
                     )
                     TextButton(onClick = { steps.removeAt(index) }) {
                         Text("Delete")
@@ -146,26 +149,34 @@ fun RecipeEditScreen(
                 shape = RoundedCornerShape(4.dp)
             ) { Text("Save") }
         }
-        editing?.let { info ->
-            val current = when (info.field) {
-                StepField.WATER -> steps[info.index].waterAmount
-                StepField.TIME -> steps[info.index].timeSec
-            }
+        editingIndex?.let { idx ->
             AlertDialog(
-                onDismissRequest = { editing = null },
-                confirmButton = { TextButton(onClick = { editing = null }) { Text("OK") } },
-                title = { Text(if (info.field == StepField.WATER) "Water (ml)" else "Time (s)") },
+                onDismissRequest = { editingIndex = null },
+                confirmButton = {
+                    TextButton(onClick = {
+                        steps[idx] = Step(editingWater, editingTime)
+                        editingIndex = null
+                    }) { Text("Save") }
+                },
+                dismissButton = {
+                    TextButton(onClick = { editingIndex = null }) { Text("Cancel") }
+                },
+                title = { Text("Edit Step ${idx + 1}") },
                 text = {
-                    NumberPicker(
-                        value = current,
-                        onValueChange = { newVal ->
-                            steps[info.index] = when (info.field) {
-                                StepField.WATER -> steps[info.index].copy(waterAmount = newVal)
-                                StepField.TIME -> steps[info.index].copy(timeSec = newVal)
-                            }
-                        },
-                        range = if (info.field == StepField.WATER) 0..500 else 0..120
-                    )
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Text("Water (ml)")
+                        NumberPicker(
+                            value = editingWater,
+                            onValueChange = { editingWater = it },
+                            range = 0..500
+                        )
+                        Text("Time (s)")
+                        NumberPicker(
+                            value = editingTime,
+                            onValueChange = { editingTime = it },
+                            range = 0..120
+                        )
+                    }
                 }
             )
         }
