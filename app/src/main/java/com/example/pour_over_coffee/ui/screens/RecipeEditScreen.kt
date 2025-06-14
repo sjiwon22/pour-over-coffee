@@ -13,14 +13,22 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.background
 // weight extension from ColumnScope is used directly within layout scopes
-import androidx.compose.material.SwipeToDismiss
-import androidx.compose.material.DismissDirection
-import androidx.compose.material.DismissValue
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.rememberDismissState
 import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.swipeable
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.unit.IntOffset
+import kotlin.math.roundToInt
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.matchParentSize
+import androidx.compose.material.rememberSwipeableState
+import androidx.compose.foundation.gestures.FractionalThreshold
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.material.IconButton
+import kotlinx.coroutines.launch
 import androidx.compose.material3.Button
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.OutlinedTextField
@@ -43,7 +51,6 @@ import com.example.pour_over_coffee.data.Recipe
 import com.example.pour_over_coffee.data.RecipeRepository
 import com.example.pour_over_coffee.data.Step
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun RecipeEditScreen(
     recipe: Recipe?,
@@ -99,60 +106,15 @@ fun RecipeEditScreen(
         Text("Steps")
         LazyColumn(modifier = Modifier.weight(1f, true)) {
             itemsIndexed(steps) { index, step ->
-                @OptIn(ExperimentalMaterialApi::class)
-                val dismissState = rememberDismissState(
-                    confirmStateChange = {
-                        if (it == DismissValue.DismissedToStart) {
-                            steps.removeAt(index)
-                            false
-                        } else {
-                            true
-                        }
-                    }
-                )
-
-                SwipeToDismiss(
-                    state = dismissState,
-                    directions = setOf(DismissDirection.EndToStart),
-                    background = {
-                        val color = if (dismissState.targetValue == DismissValue.Default) Color.Transparent else Color.Red
-                        Row(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .background(color)
-                                .padding(end = 16.dp),
-                            horizontalArrangement = Arrangement.End,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Icon(Icons.Default.Delete, contentDescription = "Delete", tint = Color.White)
-                        }
+                StepRow(
+                    step = step,
+                    index = index,
+                    onEdit = {
+                        editingIndex = index
+                        editingWater = step.waterAmount
+                        editingTime = step.timeSec
                     },
-                    dismissContent = {
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(vertical = 8.dp)
-                                .clickable {
-                                    editingIndex = index
-                                    editingWater = step.waterAmount
-                                    editingTime = step.timeSec
-                                },
-                            horizontalArrangement = Arrangement.spacedBy(8.dp),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Text("Step ${index + 1}")
-                            Text(
-                                "Water ${step.waterAmount}ml",
-                                modifier = Modifier
-                                    .weight(1f)
-                            )
-                            Text(
-                                "Time ${step.timeSec}s",
-                                modifier = Modifier
-                                    .weight(1f)
-                            )
-                        }
-                    }
+                    onDelete = { steps.removeAt(index) }
                 )
             }
             item {
@@ -229,6 +191,58 @@ fun RecipeEditScreen(
                     }
                 }
             )
+        }
+    }
+}
+
+@Composable
+private fun StepRow(
+    step: Step,
+    index: Int,
+    onEdit: () -> Unit,
+    onDelete: () -> Unit
+) {
+    val scope = rememberCoroutineScope()
+    val swipeState = rememberSwipeableState(0)
+    val maxOffset = with(LocalDensity.current) { 72.dp.toPx() }
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .swipeable(
+                state = swipeState,
+                anchors = mapOf(0f to 0, maxOffset to 1),
+                thresholds = { _, _ -> FractionalThreshold(0.3f) },
+                orientation = Orientation.Horizontal
+            )
+    ) {
+        Row(
+            modifier = Modifier
+                .matchParentSize()
+                .background(Color.Red)
+                .padding(start = 16.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            IconButton(
+                onClick = {
+                    onDelete()
+                    scope.launch { swipeState.snapTo(0) }
+                }
+            ) {
+                Icon(Icons.Default.Delete, contentDescription = "Delete", tint = Color.White)
+            }
+        }
+        Row(
+            modifier = Modifier
+                .offset { IntOffset(swipeState.offset.value.roundToInt(), 0) }
+                .fillMaxWidth()
+                .padding(vertical = 8.dp)
+                .clickable { onEdit() },
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text("Step ${index + 1}")
+            Text("Water ${step.waterAmount}ml", modifier = Modifier.weight(1f))
+            Text("Time ${step.timeSec}s", modifier = Modifier.weight(1f))
         }
     }
 }
