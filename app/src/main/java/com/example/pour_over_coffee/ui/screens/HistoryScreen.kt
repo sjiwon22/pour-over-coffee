@@ -89,7 +89,7 @@ fun HistoryScreen(onBack: () -> Unit) {
                             .aspectRatio(2f),
                         onClick = {
                             editing.value = entry
-                            scoreText.value = entry.score?.toString() ?: ""
+                            scoreText.value = entry.score?.toString() ?: "3"
                         },
                         shape = RoundedCornerShape(4.dp)
                     ) {
@@ -132,9 +132,9 @@ fun HistoryScreen(onBack: () -> Unit) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Text("Score")
                     NumberPicker(
-                        value = scoreText.value.toIntOrNull() ?: 0,
+                        value = scoreText.value.toIntOrNull() ?: 3,
                         onValueChange = { scoreText.value = it.toString() },
-                        range = 0..10
+                        range = 1..5
                     )
                 }
             }
