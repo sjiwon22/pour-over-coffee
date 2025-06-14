@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.Button
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -43,6 +44,9 @@ fun RecipeEditScreen(
             recipe?.steps?.forEach { add(it.copy()) }
         }
     }
+    enum class StepField { WATER, TIME }
+    data class EditInfo(val index: Int, val field: StepField)
+    var editing by remember { mutableStateOf<EditInfo?>(null) }
 
     Column(
         modifier = Modifier
@@ -88,26 +92,18 @@ fun RecipeEditScreen(
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     Text("Step ${index + 1}")
-                    Column(modifier = Modifier.weight(1f)) {
-                        Text("Water (ml)")
-                        NumberPicker(
-                            value = step.waterAmount,
-                            onValueChange = { amt ->
-                                steps[index] = step.copy(waterAmount = amt)
-                            },
-                            range = 0..500
-                        )
-                    }
-                    Column(modifier = Modifier.weight(1f)) {
-                        Text("Time (s)")
-                        NumberPicker(
-                            value = step.timeSec,
-                            onValueChange = { t ->
-                                steps[index] = step.copy(timeSec = t)
-                            },
-                            range = 0..120
-                        )
-                    }
+                    Text(
+                        "Water ${step.waterAmount}ml",
+                        modifier = Modifier
+                            .weight(1f)
+                            .clickable { editing = EditInfo(index, StepField.WATER) }
+                    )
+                    Text(
+                        "Time ${step.timeSec}s",
+                        modifier = Modifier
+                            .weight(1f)
+                            .clickable { editing = EditInfo(index, StepField.TIME) }
+                    )
                     TextButton(onClick = { steps.removeAt(index) }) {
                         Text("Delete")
                     }
@@ -147,6 +143,29 @@ fun RecipeEditScreen(
                 modifier = Modifier.fillMaxWidth(0.5f).aspectRatio(2f),
                 shape = RoundedCornerShape(4.dp)
             ) { Text("Save") }
+        }
+        editing?.let { info ->
+            val current = when (info.field) {
+                StepField.WATER -> steps[info.index].waterAmount
+                StepField.TIME -> steps[info.index].timeSec
+            }
+            AlertDialog(
+                onDismissRequest = { editing = null },
+                confirmButton = { TextButton(onClick = { editing = null }) { Text("OK") } },
+                title = { Text(if (info.field == StepField.WATER) "Water (ml)" else "Time (s)") },
+                text = {
+                    NumberPicker(
+                        value = current,
+                        onValueChange = { newVal ->
+                            steps[info.index] = when (info.field) {
+                                StepField.WATER -> steps[info.index].copy(waterAmount = newVal)
+                                StepField.TIME -> steps[info.index].copy(timeSec = newVal)
+                            }
+                        },
+                        range = if (info.field == StepField.WATER) 0..500 else 0..120
+                    )
+                }
+            )
         }
     }
 }
