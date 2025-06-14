@@ -56,11 +56,11 @@ object RecipeRepository {
         loaded = true
         val json = prefs?.getString(KEY_RECIPES, null)
         if (json.isNullOrEmpty()) {
-            // insert a simple default recipe with a single 3s step
+            // insert a simple default recipe with a single 30s step
             recipes.clear()
             recipes += Recipe(
                 name = "Default", waterTemp = 90, beanAmount = 15,
-                steps = mutableListOf(Step(30, 3))
+                steps = mutableListOf(Step(30, 30))
             )
             saveRecipes()
             return

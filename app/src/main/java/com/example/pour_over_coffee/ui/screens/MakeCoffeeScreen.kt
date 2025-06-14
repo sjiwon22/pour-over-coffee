@@ -11,10 +11,10 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+// weight modifiers are provided by Column/Row scopes
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
@@ -92,13 +92,7 @@ fun MakeCoffeeScreen(onDone: () -> Unit) {
                     ) { Text(label) }
                 }
             }
-            TextButton(
-                onClick = onDone,
-                modifier = Modifier
-                    .fillMaxWidth(0.5f)
-                    .aspectRatio(2f),
-                shape = RoundedCornerShape(4.dp)
-            ) { Text("Back") }
+            // Back button removed
         }
     } else {
         val recipe = selected.value!!
@@ -122,10 +116,16 @@ fun MakeCoffeeScreen(onDone: () -> Unit) {
                     running -> "Step #${index + 1}\nWater ${step.waterAmount}ml\n${timeLeft.value}s"
                     else -> "Step #${index + 1}\nWater ${step.waterAmount}ml\nwait for ${step.timeSec}s"
                 }
-                val colors = if (done) {
-                    ButtonDefaults.buttonColors(containerColor = Color(0xFF9CCC65))
-                } else {
-                    ButtonDefaults.buttonColors()
+                val colors = when {
+                    running -> ButtonDefaults.buttonColors(
+                        containerColor = Color(0xFF87CEEB),
+                        disabledContainerColor = Color(0xFF87CEEB)
+                    )
+                    done -> ButtonDefaults.buttonColors(
+                        containerColor = Color(0xFF9CCC65),
+                        disabledContainerColor = Color(0xFF9CCC65)
+                    )
+                    else -> ButtonDefaults.buttonColors()
                 }
                 Button(
                     onClick = { activeStep.value = index },
@@ -147,13 +147,7 @@ fun MakeCoffeeScreen(onDone: () -> Unit) {
                     colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF9CCC65))
                 ) { Text("Have a good coffee") }
             }
-            TextButton(
-                onClick = { selected.value = null },
-                modifier = Modifier
-                    .fillMaxWidth(0.5f)
-                    .aspectRatio(2f),
-                shape = RoundedCornerShape(4.dp)
-            ) { Text("Back") }
+            // Back button removed
         }
     }
 }

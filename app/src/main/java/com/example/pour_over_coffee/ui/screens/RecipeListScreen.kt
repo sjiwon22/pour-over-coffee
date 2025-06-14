@@ -70,15 +70,7 @@ fun RecipeListScreen(
         ) {
             Text("Add")
         }
-        TextButton(
-            onClick = onBack,
-            modifier = Modifier
-                .fillMaxWidth(0.5f)
-                .aspectRatio(2f),
-            shape = RoundedCornerShape(4.dp)
-        ) {
-            Text("Back")
-        }
+        // Back button removed
     }
 
     toDelete.value?.let { recipe ->
