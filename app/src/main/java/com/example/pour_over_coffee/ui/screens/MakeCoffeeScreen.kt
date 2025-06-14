@@ -116,8 +116,14 @@ fun MakeCoffeeScreen(onDone: () -> Unit) {
                     else -> "Step #${index + 1}\nWater ${step.waterAmount}ml\nwait for ${step.timeSec}s"
                 }
                 val colors = when {
-                    running -> ButtonDefaults.buttonColors(containerColor = Color(0xFF87CEEB))
-                    done -> ButtonDefaults.buttonColors(containerColor = Color(0xFF9CCC65))
+                    running -> ButtonDefaults.buttonColors(
+                        containerColor = Color(0xFF87CEEB),
+                        disabledContainerColor = Color(0xFF87CEEB)
+                    )
+                    done -> ButtonDefaults.buttonColors(
+                        containerColor = Color(0xFF9CCC65),
+                        disabledContainerColor = Color(0xFF9CCC65)
+                    )
                     else -> ButtonDefaults.buttonColors()
                 }
                 Button(
