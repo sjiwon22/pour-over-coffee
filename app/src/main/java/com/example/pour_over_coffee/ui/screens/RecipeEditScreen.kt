@@ -23,7 +23,6 @@ import androidx.compose.ui.unit.IntOffset
 import kotlin.math.roundToInt
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.matchParentSize
 import androidx.compose.material.rememberSwipeableState
 import androidx.compose.material.FractionalThreshold
 import androidx.compose.ui.platform.LocalDensity
@@ -218,7 +217,7 @@ private fun StepRow(
     ) {
         Row(
             modifier = Modifier
-                .matchParentSize()
+                .fillMaxSize()
                 .background(Color.Red)
                 .padding(start = 16.dp),
             verticalAlignment = Alignment.CenterVertically
