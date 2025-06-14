@@ -9,7 +9,7 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
-import androidx.compose.material3.OutlinedTextField
+import com.example.pour_over_coffee.ui.components.NumberPicker
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -88,11 +88,14 @@ fun HistoryScreen(onBack: () -> Unit) {
             },
             title = { Text(entry.name) },
             text = {
-                OutlinedTextField(
-                    value = scoreText.value,
-                    onValueChange = { scoreText.value = it },
-                    label = { Text("Score") }
-                )
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text("Score")
+                    NumberPicker(
+                        value = scoreText.value.toIntOrNull() ?: 0,
+                        onValueChange = { scoreText.value = it.toString() },
+                        range = 0..10
+                    )
+                }
             }
         )
     }

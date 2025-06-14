@@ -14,6 +14,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import com.example.pour_over_coffee.ui.components.NumberPicker
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -52,8 +53,30 @@ fun RecipeEditScreen(
         horizontalAlignment = Alignment.Start
     ) {
         OutlinedTextField(value = name, onValueChange = { name = it }, label = { Text("Recipe name") }, modifier = Modifier.fillMaxWidth())
-        OutlinedTextField(value = temp.toString(), onValueChange = { temp = it.toIntOrNull() ?: temp }, label = { Text("Water temp") }, modifier = Modifier.fillMaxWidth())
-        OutlinedTextField(value = beans.toString(), onValueChange = { beans = it.toIntOrNull() ?: beans }, label = { Text("Bean amount") }, modifier = Modifier.fillMaxWidth())
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text("Water temp")
+            NumberPicker(
+                value = temp,
+                onValueChange = { temp = it },
+                range = 60..100
+            )
+        }
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text("Bean amount")
+            NumberPicker(
+                value = beans,
+                onValueChange = { beans = it },
+                range = 5..60
+            )
+        }
 
         Text("Steps")
         LazyColumn(modifier = Modifier.weight(1f, true)) {
@@ -65,24 +88,26 @@ fun RecipeEditScreen(
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     Text("Step ${index + 1}")
-                    OutlinedTextField(
-                        value = step.waterAmount.toString(),
-                        onValueChange = { input ->
-                            val amt = input.toIntOrNull() ?: step.waterAmount
-                            steps[index] = step.copy(waterAmount = amt)
-                        },
-                        label = { Text("Water (ml)") },
-                        modifier = Modifier.weight(1f)
-                    )
-                    OutlinedTextField(
-                        value = step.timeSec.toString(),
-                        onValueChange = { input ->
-                            val t = input.toIntOrNull() ?: step.timeSec
-                            steps[index] = step.copy(timeSec = t)
-                        },
-                        label = { Text("Time (s)") },
-                        modifier = Modifier.weight(1f)
-                    )
+                    Column(modifier = Modifier.weight(1f)) {
+                        Text("Water (ml)")
+                        NumberPicker(
+                            value = step.waterAmount,
+                            onValueChange = { amt ->
+                                steps[index] = step.copy(waterAmount = amt)
+                            },
+                            range = 0..500
+                        )
+                    }
+                    Column(modifier = Modifier.weight(1f)) {
+                        Text("Time (s)")
+                        NumberPicker(
+                            value = step.timeSec,
+                            onValueChange = { t ->
+                                steps[index] = step.copy(timeSec = t)
+                            },
+                            range = 0..120
+                        )
+                    }
                     TextButton(onClick = { steps.removeAt(index) }) {
                         Text("Delete")
                     }
