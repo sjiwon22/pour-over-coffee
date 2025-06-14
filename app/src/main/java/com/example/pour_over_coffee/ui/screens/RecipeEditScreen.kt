@@ -17,7 +17,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.swipeable
+import androidx.compose.material.swipeable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.unit.IntOffset
 import kotlin.math.roundToInt
@@ -25,7 +25,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.matchParentSize
 import androidx.compose.material.rememberSwipeableState
-import androidx.compose.foundation.gestures.FractionalThreshold
+import androidx.compose.material.FractionalThreshold
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.material.IconButton
 import kotlinx.coroutines.launch
@@ -195,6 +195,7 @@ fun RecipeEditScreen(
     }
 }
 
+@OptIn(androidx.compose.material.ExperimentalMaterialApi::class)
 @Composable
 private fun StepRow(
     step: Step,
